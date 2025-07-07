@@ -1,6 +1,8 @@
 from flask import Flask, jsonify, request
 import subprocess
 
+from get_flight_info import get_flight_info
+
 app = Flask(__name__)
 
 @app.route('/')
@@ -22,7 +24,15 @@ def return_to_home():
         subprocess.Popen(['python3', 'return_to_home.py'])
         return jsonify(message="Script return_to_home lancé"), 200
     except Exception as e:
-        return jsonify(error=str(e)), 500        
+        return jsonify(error=str(e)), 500       
+ 
+@app.route('/flight_info', methods=['GET'])
+def flight_info():
+    try:
+        data = get_flight_info()
+        return jsonify(data), 200
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
