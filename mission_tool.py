@@ -250,7 +250,7 @@ def send_mission(filename):
             )
             print(f"WP {i} envoyé")
         else:
-            print(f"⚠️ Pas de demande pour WP {i}")
+            print(f"Pas de demande pour WP {i}")
 
     print("Mission envoyée.")
 
