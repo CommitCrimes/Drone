@@ -1,7 +1,12 @@
+import os
 from flask import Flask, jsonify, request
+from flask import Flask, jsonify, Response
+
 import subprocess
+import json
 
 from get_flight_info import get_flight_info
+from mission_tool import create_mission, send_mission
 
 app = Flask(__name__)
 
@@ -24,8 +29,44 @@ def return_to_home():
         subprocess.Popen(['python3', 'return_to_home.py'])
         return jsonify(message="Script return_to_home lancé"), 200
     except Exception as e:
-        return jsonify(error=str(e)), 500       
- 
+        return jsonify(error=str(e)), 500   
+        
+@app.route('/mission/create', methods=['POST'])
+def api_create_mission():
+    try:
+        data = request.get_json()
+        filename = data.get('filename', 'mission.json')
+        waypoints = data.get('waypoints')
+        create_mission(filename, waypoints)  # <-- ici
+        return jsonify(message=f"Mission créée dans {filename}"), 200
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
+
+
+@app.route('/mission/send', methods=['POST'])
+def api_send_mission():
+    try:
+        if 'file' not in request.files:
+            return jsonify(error="Aucun fichier reçu"), 400
+
+        file = request.files['file']
+        if not file.filename.endswith('.waypoints'):
+            return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
+
+        # Sauvegarder le fichier temporairement
+        filepath = os.path.join('/tmp', file.filename)
+        file.save(filepath)
+
+        # Appeler la fonction de mission
+        send_mission(filepath)
+
+        return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
+
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
 @app.route('/flight_info', methods=['GET'])
 def flight_info():
     try:
@@ -36,3 +77,11 @@ def flight_info():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
+@app.route('/')
+def hello_world():
+    response = OrderedDict()
+    response["status"] = "ok"
+    response["message"] = "API du drone"
+
+    return Response(json.dumps(response), mimetype='application/json')
