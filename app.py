@@ -1,3 +1,4 @@
+import os
 from flask import Flask, jsonify, request
 from flask import Flask, jsonify, Response
 
@@ -47,9 +48,22 @@ def api_create_mission():
 @app.route('/mission/send', methods=['POST'])
 def api_send_mission():
     try:
-        filename = request.json.get('filename', 'mission.json')
-        send_mission(filename)
-        return jsonify(message=f"Mission envoyée depuis {filename}"), 200
+        if 'file' not in request.files:
+            return jsonify(error="Aucun fichier reçu"), 400
+
+        file = request.files['file']
+        if not file.filename.endswith('.waypoints'):
+            return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
+
+        # Sauvegarder le fichier temporairement
+        filepath = os.path.join('/tmp', file.filename)
+        file.save(filepath)
+
+        # Appeler la fonction de mission
+        send_mission(filepath)
+
+        return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
+
     except Exception as e:
         return jsonify(error=str(e)), 500
 
