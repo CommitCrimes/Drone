@@ -9,11 +9,18 @@ import json
 from get_flight_info import get_flight_info
 from mission_tool import create_mission, send_mission
 
+
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+# Accéder aux valeurs
+drone_id = config["drone_id"]
+
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-    return jsonify(message="T'es mauvais jack")
+    return jsonify(message="API du drone: " + str(drone_id))
 
 @app.route('/start', methods=['POST'])
 def start_mission():
@@ -71,7 +78,7 @@ def api_send_mission():
 @app.route('/flight_info', methods=['GET'])
 def flight_info():
     try:
-        data = get_flight_info()
+        data = get_flight_info(drone_id)
         return jsonify(data), 200
     except Exception as e:
         return jsonify(error=str(e)), 500

@@ -1,7 +1,7 @@
 import math
 from pymavlink import mavutil
 
-def get_flight_info():
+def get_flight_info(drone_id):
     # Connexion MAVLink
     master = mavutil.mavlink_connection('udp:127.0.0.1:14550')
     master.wait_heartbeat(timeout=5)
@@ -23,6 +23,7 @@ def get_flight_info():
         vz = msg.vz / 100.0  # m/s
 
         return {
+            "drone_id": str(drone_id),
             "is_armed": (heartbeat.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0,
             "flight_mode": mavutil.mode_string_v10(heartbeat),
             # "system_id": master.target_system,
