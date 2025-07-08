@@ -1,0 +1,22 @@
+[
+    {
+        "command": 22,
+        "param1": 0,
+        "param2": 0,
+        "param3": 0,
+        "param4": 0,
+        "lat": 47.397742,
+        "lon": 8.545594,
+        "alt": 10
+    },
+    {
+        "command": 16,
+        "param1": 0,
+        "param2": 0,
+        "param3": 0,
+        "param4": 0,
+        "lat": 47.397842,
+        "lon": 8.545794,
+        "alt": 15
+    }
+]
