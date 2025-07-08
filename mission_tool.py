@@ -56,7 +56,7 @@ def create_mission(filename, waypoints=None):
             )
             f.write(line)
 
-    print(f"✅ Mission .waypoints créée : {filename}")
+    print(f"Mission .waypoints créée : {filename}")
 
 
 # --- Point d'entrée ---
@@ -179,9 +179,9 @@ def send_mission(filename):
                 p[0], p[1], p[2], p[3],
                 p[4], p[5], p[6]
             )
-            print(f"✅ WP {i} envoyé")
+            print(f"WP {i} envoyé")
         else:
-            print(f"⚠️ Pas de demande pour WP {i}")
+            print(f"Pas de demande pour WP {i}")
 
     time.sleep(1)  # délai après envoi
 
@@ -194,7 +194,7 @@ def send_mission(filename):
     # Passe en mode AUTO explicitement
     mode_id = master.mode_mapping().get('AUTO')
     if mode_id is None:
-        print("⚠️ Mode AUTO non trouvé, vérifie le mode disponible")
+        print("Mode AUTO non trouvé, vérifie le mode disponible")
     else:
         master.set_mode(mode_id)
         print("Mode changé en AUTO")
