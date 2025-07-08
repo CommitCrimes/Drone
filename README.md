@@ -39,9 +39,9 @@ Renvoie la position et vitesse actuelle du drone :
 
 
 🔸 POST /create
-Crée une mission (fichier mission.json) via create.py.
+Crée une mission (fichier mission.waypoints)
 
-curl -X POST http://localhost:5000/create
+curl -X POST http://localhost:5000/mission/create
 🔸 POST /start
 
 Envoie la mission au drone via start_mission.py.
