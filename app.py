@@ -43,12 +43,23 @@ def return_to_home():
 def api_create_mission():
     try:
         data = request.get_json()
-        filename = data.get('filename', 'mission.json')
-        waypoints = data.get('waypoints')
-        create_mission(filename, waypoints)  # <-- ici
+        filename = data.get('filename', 'mission.waypoints')
+        waypoints = data.get('waypoints', [])
+
+        # ➕ Récupération dynamique des coordonnées actuelles
+        info = get_flight_info(drone_id)
+        latitude = info["latitude"]
+        longitude = info["longitude"]
+        altitude = info["altitude_m"]
+
+        # Appel de la fonction
+        create_mission(filename, latitude, longitude, altitude, waypoints)
+
         return jsonify(message=f"Mission créée dans {filename}"), 200
+
     except Exception as e:
         return jsonify(error=str(e)), 500
+
 
 
 
