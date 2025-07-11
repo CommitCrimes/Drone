@@ -1,41 +1,48 @@
 import json
 import sys
 from pymavlink import mavutil
+from get_flight_info import get_flight_info
 
 import json
 #Rajouter une premiere ligne pour le take off qui correspond a l'emplacement actuel du drone Faire une request Flight info pour récupérer la position
+with open("config.json", "r") as f:
+    config = json.load(f)
+
+# Accéder aux valeurs
+drone_id = config["drone_id"]
+
+# ─────────────────────────────────────────────
+# Fonction : create_mission
+# But : Créer un fichier de mission QGroundControl (.waypoints)
+# - En mode 'auto' : génère HOME et TAKEOFF, automatiquement, à partir de la position du drone. pas besoin de donner la commmand]
+# - En mode 'man' : utilise les waypoints fournis sans rien ajouter
+# Entrées :
+#   - filename : chemin du fichier de sortie (.waypoints)
+#   - altitude_takeoff : hauteur cible du décollage
+#   - waypoints : liste de points fournis (optionnel)
+#   - mode : "auto" ou "man"
+# Sortie :
+#   - Écrit le fichier .waypoints prêt à être envoyé
+# ─────────────────────────────────────────────
 def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
-    """
-    Crée un fichier .waypoints compatible QGC
-
-    Args:
-        filename (str): nom du fichier à écrire
-        altitude_takeoff (float): altitude du takeoff
-        waypoints (list of dict): liste des waypoints (avec lat, lon, alt, etc)
-        mode (str): "auto" ou "man"
-    """
-
     mission_waypoints = []
-
+    
     if mode == "man":
-        # Mode manuel : waypoints complets attendus
         if not waypoints:
             raise ValueError("En mode 'man', il faut passer la liste complète de waypoints.")
         mission_waypoints = waypoints
 
     else:
-        # Mode auto : on récupère la position actuelle du drone
-        flight_info = get_flight_info()
+        flight_info = get_flight_info(drone_id)
         latitude = flight_info["latitude"]
         longitude = flight_info["longitude"]
-        altitude = flight_info.get("altitude", altitude_takeoff)  # fallback si altitude non dispo
+        altitude = flight_info.get("altitude", altitude_takeoff)
 
-        # Home (seq=0)
         mission_waypoints.append({
             "seq": 0,
             "current": 1,
             "frame": 0,
-            "command": 16,  # MAV_CMD_NAV_WAYPOINT
+            "command": 16,
             "param1": 0,
             "param2": 0,
             "param3": 0,
@@ -46,12 +53,11 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
             "autoContinue": 1
         })
 
-        # Takeoff (seq=1)
         mission_waypoints.append({
             "seq": 1,
             "current": 0,
             "frame": 0,
-            "command": 22,  # MAV_CMD_NAV_TAKEOFF
+            "command": 22,
             "param1": 0,
             "param2": 0,
             "param3": 0,
@@ -62,7 +68,6 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
             "autoContinue": 1
         })
 
-        # Ajout des autres waypoints à partir de seq=2
         if waypoints:
             for i, wp in enumerate(waypoints, start=2):
                 mission_waypoints.append({
@@ -80,12 +85,10 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
                     "autoContinue": wp.get("autoContinue", 1)
                 })
 
-        # Forcer le dernier point en LAND
         if mission_waypoints:
-            mission_waypoints[-1]["command"] = 21  # MAV_CMD_NAV_LAND
+            mission_waypoints[-1]["command"] = 21
             mission_waypoints[-1]["alt"] = 0
 
-    # Écriture dans le fichier
     with open(filename, "w") as f:
         f.write("QGC WPL 110\n")
         for wp in mission_waypoints:
@@ -95,8 +98,17 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
                 f"{wp['lat']:.8f}\t{wp['lon']:.8f}\t{wp['alt']:.6f}\t{wp['autoContinue']}\n"
             )
             f.write(line)
-
     print(f"Mission .waypoints créée : {filename}")
+
+
+# ─────────────────────────────────────────────
+# Fonction : send_mission
+# But : Envoyer un fichier .waypoints vers le drone via MAVLink
+# Étapes :
+#   - Parse le fichier
+#   - Envoie chaque point sur le lien MAVLink (UDP)
+#   - Définit le point courant à 0
+# ─────────────────────────────────────────────
 
 def send_mission(filename):
     from pymavlink import mavutil
@@ -194,13 +206,25 @@ if __name__ == "__main__":
 # --- Point d'entrée ---
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Utilisation : python mission_tool.py [create|send] nom_fichier.waypoints")
+        print("Utilisation : python mission_tool.py [create|send] mission.json/.waypoints")
         sys.exit(1)
+
     action = sys.argv[1]
     fichier = sys.argv[2]
+
     if action == "create":
-        create_mission(fichier)
+        with open(fichier, "r") as f:
+            data = json.load(f)
+
+        output_filename = data.get("filename", "default_mission.waypoints")
+        altitude = data.get("altitude_takeoff", 30)
+        waypoints = data.get("waypoints", [])
+        mode = data.get("mode", "auto")
+
+        create_mission(output_filename, altitude, waypoints, mode)
+
     elif action == "send":
         send_mission(fichier)
+
     else:
         print("Commande inconnue. Utilisez 'create' ou 'send'.")

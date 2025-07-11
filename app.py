@@ -9,6 +9,9 @@ import json
 from get_flight_info import get_flight_info
 from mission_tool import create_mission, send_mission
 
+# ─────────────────────────────────────────────
+# Charger la configuration du drone
+# ─────────────────────────────────────────────
 
 with open("config.json", "r") as f:
     config = json.load(f)
@@ -16,12 +19,23 @@ with open("config.json", "r") as f:
 # Accéder aux valeurs
 drone_id = config["drone_id"]
 
+# ─────────────────────────────────────────────
+# Initialisation de l'application Flask
+# ─────────────────────────────────────────────
 app = Flask(__name__)
 
+
+# ─────────────────────────────────────────────
+# Route GET / — Route test
+# ─────────────────────────────────────────────
 @app.route('/')
 def hello_world():
     return jsonify(message="API du drone: " + str(drone_id))
 
+# ─────────────────────────────────────────────
+# Route POST /start — Lancer une mission
+# Lance le script `start_mission.py` en tâche de fond
+# ─────────────────────────────────────────────
 @app.route('/start', methods=['POST'])
 def start_mission():
     try:
@@ -31,6 +45,10 @@ def start_mission():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+# ─────────────────────────────────────────────
+# Route POST /rth — Return To Home
+# Lance le script `return_to_home.py` en tâche de fond
+# ─────────────────────────────────────────────
 @app.route('/rth', methods=['POST'])
 def return_to_home():
     try:
@@ -39,21 +57,30 @@ def return_to_home():
     except Exception as e:
         return jsonify(error=str(e)), 500   
         
+
+# ─────────────────────────────────────────────
+# Route POST /mission/create
+# Crée une mission .waypoints (mode auto ou man)
+# Requiert un body JSON contenant :
+# {
+#   "filename": "missions/xxx.waypoints",
+#   "altitude_takeoff": 30,
+#   "waypoints": [voir dans la docu],
+#   "mode": "auto" | "man"
+# }
+# ─────────────────────────────────────────────
 @app.route('/mission/create', methods=['POST'])
 def api_create_mission():
     try:
         data = request.get_json()
-        filename = data.get('filename', 'mission.waypoints')
-        waypoints = data.get('waypoints', [])
 
-        # ➕ Récupération dynamique des coordonnées actuelles
-        info = get_flight_info(drone_id)
-        latitude = info["latitude"]
-        longitude = info["longitude"]
-        altitude = info["altitude_m"]
+        filename = data.get("filename", "mission.waypoints")
+        altitude_takeoff = data.get("altitude_takeoff", 30)
+        waypoints = data.get("waypoints", [])
+        mode = data.get("mode", "auto")
 
-        # Appel de la fonction
-        create_mission(filename, latitude, longitude, altitude, waypoints)
+        # Appel correct avec 4 arguments
+        create_mission(filename, altitude_takeoff, waypoints, mode)
 
         return jsonify(message=f"Mission créée dans {filename}"), 200
 
@@ -62,8 +89,11 @@ def api_create_mission():
 
 
 
-
-
+# ─────────────────────────────────────────────
+# Route POST /mission/send
+# Envoie un fichier .waypoints au drone
+# Body attendu : un fichier (missions/fichier.waypoints)
+# ─────────────────────────────────────────────
 @app.route('/mission/send', methods=['POST'])
 def api_send_mission():
     try:
@@ -86,6 +116,10 @@ def api_send_mission():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+# ─────────────────────────────────────────────
+# Route GET /flight_info
+# Retourne les infos de vol actuelles du drone
+# ─────────────────────────────────────────────
 @app.route('/flight_info', methods=['GET'])
 def flight_info():
     try:
