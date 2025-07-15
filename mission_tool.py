@@ -100,7 +100,6 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
             f.write(line)
     print(f"Mission .waypoints créée : {filename}")
 
-
 # ─────────────────────────────────────────────
 # Fonction : send_mission
 # But : Envoyer un fichier .waypoints vers le drone via MAVLink
@@ -185,22 +184,73 @@ def send_mission(filename):
     time.sleep(1)
     print("Mission envoyé")
 
+def modify_mission(filename, seq_to_modify, updated_fields):
+    """
+    Modifie un waypoint dans un fichier .waypoints à partir de son numéro de séquence.
 
-# --- Point d'entrée ---
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Utilisation : python mission_tool.py [create|send] nom_fichier.json")
-        sys.exit(1)
+    :param filename: Chemin du fichier .waypoints
+    :param seq_to_modify: Numéro de séquence (int) du waypoint à modifier
+    :param updated_fields: Dictionnaire des champs à mettre à jour (ex: {"lat": 48.85, "lon": 2.29})
+    """
+    with open(filename, "r") as f:
+        lines = f.readlines()
 
-    action = sys.argv[1]
-    fichier = sys.argv[2]
+    if not lines or not lines[0].startswith("QGC WPL 110"):
+        print("Format de fichier invalide.")
+        return
 
-    if action == "create":
-        create_mission(fichier)
-    elif action == "send":
-        send_mission(fichier)
-    else:
-        print("Commande inconnue. Utilisez 'create' ou 'send'.")
+    header = lines[0]
+    waypoints = lines[1:]
+    modified = False
+    new_lines = [header]
+
+    for line in waypoints:
+        parts = line.strip().split("\t")
+        if len(parts) != 12:
+            new_lines.append(line)
+            continue
+
+        seq = int(parts[0])
+        if seq == seq_to_modify:
+            # Modifier les champs
+            if "lat" in updated_fields:
+                parts[8] = f"{float(updated_fields['lat']):.8f}"
+            if "lon" in updated_fields:
+                parts[9] = f"{float(updated_fields['lon']):.8f}"
+            if "alt" in updated_fields:
+                parts[10] = f"{float(updated_fields['alt']):.6f}"
+            if "command" in updated_fields:
+                parts[3] = str(int(updated_fields['command']))
+            if "frame" in updated_fields:
+                parts[2] = str(int(updated_fields['frame']))
+            if "param1" in updated_fields:
+                parts[4] = f"{float(updated_fields['param1']):.8f}"
+            if "param2" in updated_fields:
+                parts[5] = f"{float(updated_fields['param2']):.8f}"
+            if "param3" in updated_fields:
+                parts[6] = f"{float(updated_fields['param3']):.8f}"
+            if "param4" in updated_fields:
+                parts[7] = f"{float(updated_fields['param4']):.8f}"
+            if "autoContinue" in updated_fields:
+                parts[11] = str(int(updated_fields['autoContinue']))
+            if "current" in updated_fields:
+                parts[1] = str(int(updated_fields['current']))
+
+            modified_line = "\t".join(parts) + "\n"
+            new_lines.append(modified_line)
+            modified = True
+            print(f"Waypoint {seq} modifié.")
+        else:
+            new_lines.append(line)
+
+    if not modified:
+        print(f"Aucun waypoint avec seq={seq_to_modify} trouvé.")
+        return
+
+    with open(filename, "w") as f:
+        f.writelines(new_lines)
+
+    print(f"Fichier mis à jour : {filename}")
 
 
 # --- Point d'entrée ---
@@ -225,6 +275,23 @@ if __name__ == "__main__":
 
     elif action == "send":
         send_mission(fichier)
+    elif action == "modify":
+        if len(sys.argv) < 5:
+            print("Utilisation : python mission_tool.py modify fichier.waypoints seq champ=valeur ...")
+            sys.exit(1)
+
+        seq = int(sys.argv[3])
+        updated_fields = {}
+        for arg in sys.argv[4:]:
+            if "=" in arg:
+                key, val = arg.split("=")
+                try:
+                    updated_fields[key] = float(val) if "." in val else int(val)
+                except ValueError:
+                    updated_fields[key] = val
+
+        modify_mission(fichier, seq, updated_fields)
+
 
     else:
-        print("Commande inconnue. Utilisez 'create' ou 'send'.")
+        print("Commande inconnue. Utilisez 'create' ou 'send' ou 'modify'.")
