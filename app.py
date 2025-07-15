@@ -44,6 +44,19 @@ def start_mission():
         return jsonify(message="Script start_mission.py lancé"), 200
     except Exception as e:
         return jsonify(error=str(e)), 500
+    
+# ─────────────────────────────────────────────
+# Route POST /land — Fait atterir le Drone
+# Lance le script `land.py` en tâche de fond
+# ─────────────────────────────────────────────
+@app.route('/land', methods=['POST'])
+def land():
+    try:
+        # Lancer le script Python en tâche de fond
+        subprocess.Popen(['python3', 'land.py'])
+        return jsonify(message="Script land.py lancé"), 200
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 # ─────────────────────────────────────────────
 # Route POST /rth — Return To Home
