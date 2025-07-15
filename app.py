@@ -7,7 +7,7 @@ import subprocess
 import json
 
 from get_flight_info import get_flight_info
-from mission_tool import create_mission, send_mission
+from mission_tool import create_mission, send_mission, modify_mission
 
 # ─────────────────────────────────────────────
 # Charger la configuration du drone
@@ -116,6 +116,25 @@ def api_send_mission():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+@app.route('/mission/modify', methods=['POST'])
+def api_modify_mission():
+    try:
+        data = request.get_json()
+
+        filename = data.get("filename")
+        seq = data.get("seq")
+        updates = data.get("updates", {})
+
+        if not filename or seq is None or not isinstance(updates, dict):
+            return jsonify(error="Champs 'filename', 'seq' et 'updates' requis"), 400
+
+        modify_mission(filename, int(seq), updates)
+        return jsonify(message=f"Waypoint {seq} modifié dans {filename}"), 200
+
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+
 # ─────────────────────────────────────────────
 # Route GET /flight_info
 # Retourne les infos de vol actuelles du drone
@@ -138,3 +157,4 @@ def hello_world():
     response["message"] = "API du drone"
 
     return Response(json.dumps(response), mimetype='application/json')
+
