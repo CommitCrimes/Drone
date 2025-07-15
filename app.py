@@ -1,53 +1,53 @@
 import os
-from typing import OrderedDict
-from flask import Flask, jsonify, request
-from flask import Flask, jsonify, Response
-
-import subprocess
 import json
+import subprocess
+from collections import OrderedDict
+from flask import Flask, jsonify, request, Response
 
 from get_flight_info import get_flight_info
 from mission_tool import create_mission, send_mission, modify_mission
+from pymavlink import mavutil
 
 # ─────────────────────────────────────────────
 # Charger la configuration du drone
 # ─────────────────────────────────────────────
-
 with open("config.json", "r") as f:
     config = json.load(f)
-
-# Accéder aux valeurs
-drone_id = config["drone_id"]
+drone_id = config.get("drone_id", "undefined")
 
 # ─────────────────────────────────────────────
-# Initialisation de l'application Flask
+# Initialisation de Flask et de MAVLink
 # ─────────────────────────────────────────────
 app = Flask(__name__)
-
+master = mavutil.mavlink_connection('udp:127.0.0.1:14550')
+master.wait_heartbeat()
 
 # ─────────────────────────────────────────────
-# Route GET / — Route test
+# GET /
+# Test de l’API
 # ─────────────────────────────────────────────
 @app.route('/')
 def hello_world():
-    return jsonify(message="API du drone: " + str(drone_id))
+    response = OrderedDict()
+    response["status"] = "ok"
+    response["message"] = f"API du drone: {drone_id}"
+    return Response(json.dumps(response), mimetype='application/json')
 
 # ─────────────────────────────────────────────
-# Route POST /start — Lancer une mission
-# Lance le script `start_mission.py` en tâche de fond
+# POST /start
+# Lance le script de mission
 # ─────────────────────────────────────────────
 @app.route('/start', methods=['POST'])
 def start_mission():
     try:
-        # Lancer le script Python en tâche de fond
         subprocess.Popen(['python3', 'start_mission.py'])
         return jsonify(message="Script start_mission.py lancé"), 200
     except Exception as e:
         return jsonify(error=str(e)), 500
 
 # ─────────────────────────────────────────────
-# Route POST /rth — Return To Home
-# Lance le script `return_to_home.py` en tâche de fond
+# POST /rth
+# Retour au point de départ
 # ─────────────────────────────────────────────
 @app.route('/rth', methods=['POST'])
 def return_to_home():
@@ -55,44 +55,30 @@ def return_to_home():
         subprocess.Popen(['python3', 'return_to_home.py'])
         return jsonify(message="Script return_to_home lancé"), 200
     except Exception as e:
-        return jsonify(error=str(e)), 500   
-        
+        return jsonify(error=str(e)), 500
 
 # ─────────────────────────────────────────────
-# Route POST /mission/create
-# Crée une mission .waypoints (mode auto ou man)
-# Requiert un body JSON contenant :
-# {
-#   "filename": "missions/xxx.waypoints",
-#   "altitude_takeoff": 30,
-#   "waypoints": [voir dans la docu],
-#   "mode": "auto" | "man"
-# }
+# POST /mission/create
+# Crée une mission personnalisée
 # ─────────────────────────────────────────────
 @app.route('/mission/create', methods=['POST'])
 def api_create_mission():
     try:
         data = request.get_json()
-
         filename = data.get("filename", "mission.waypoints")
         altitude_takeoff = data.get("altitude_takeoff", 30)
         waypoints = data.get("waypoints", [])
         mode = data.get("mode", "auto")
 
-        # Appel correct avec 4 arguments
         create_mission(filename, altitude_takeoff, waypoints, mode)
-
         return jsonify(message=f"Mission créée dans {filename}"), 200
 
     except Exception as e:
         return jsonify(error=str(e)), 500
 
-
-
 # ─────────────────────────────────────────────
-# Route POST /mission/send
-# Envoie un fichier .waypoints au drone
-# Body attendu : un fichier (missions/fichier.waypoints)
+# POST /mission/send
+# Envoie un fichier .waypoints
 # ─────────────────────────────────────────────
 @app.route('/mission/send', methods=['POST'])
 def api_send_mission():
@@ -104,23 +90,23 @@ def api_send_mission():
         if not file.filename.endswith('.waypoints'):
             return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
 
-        # Sauvegarder le fichier temporairement
         filepath = os.path.join('/tmp', file.filename)
         file.save(filepath)
 
-        # Appeler la fonction de mission
         send_mission(filepath)
-
         return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
 
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+# ─────────────────────────────────────────────
+# POST /mission/modify
+# Modifie un waypoint
+# ─────────────────────────────────────────────
 @app.route('/mission/modify', methods=['POST'])
 def api_modify_mission():
     try:
         data = request.get_json()
-
         filename = data.get("filename")
         seq = data.get("seq")
         updates = data.get("updates", {})
@@ -134,10 +120,9 @@ def api_modify_mission():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
-
 # ─────────────────────────────────────────────
-# Route GET /flight_info
-# Retourne les infos de vol actuelles du drone
+# GET /flight_info
+# Donne les infos de vol en temps réel
 # ─────────────────────────────────────────────
 @app.route('/flight_info', methods=['GET'])
 def flight_info():
@@ -147,14 +132,31 @@ def flight_info():
     except Exception as e:
         return jsonify(error=str(e)), 500
 
+# ─────────────────────────────────────────────
+# POST /command
+# Changer le mode de vol (GUIDED, LOITER, etc.)
+# ─────────────────────────────────────────────
+@app.route('/command', methods=['POST'])
+def send_command():
+    try:
+        data = request.get_json()
+        mode = data.get("mode", "").upper()
+
+        if not mode:
+            return jsonify(error="Champ 'mode' requis"), 400
+
+        if mode not in master.mode_mapping():
+            return jsonify(error=f"Mode '{mode}' non supporté"), 400
+
+        mode_id = master.mode_mapping()[mode]
+        master.set_mode(mode_id)
+        return jsonify(message=f"Mode changé vers {mode}"), 200
+
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
+# ─────────────────────────────────────────────
+# Lancement de l'application
+# ─────────────────────────────────────────────
 if __name__ == '__main__':
     app.run(debug=True)
-
-@app.route('/')
-def hello_world():
-    response = OrderedDict()
-    response["status"] = "ok"
-    response["message"] = "API du drone"
-
-    return Response(json.dumps(response), mimetype='application/json')
-
