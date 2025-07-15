@@ -8,6 +8,7 @@ import json
 
 from get_flight_info import get_flight_info
 from mission_tool import create_mission, send_mission, modify_mission
+from init_log import logger
 
 # ─────────────────────────────────────────────
 # Charger la configuration du drone
@@ -41,8 +42,10 @@ def start_mission():
     try:
         # Lancer le script Python en tâche de fond
         subprocess.Popen(['python3', 'start_mission.py'])
+        logger.info("Script start_mission.py lancé")
         return jsonify(message="Script start_mission.py lancé"), 200
     except Exception as e:
+        logger.error(f"Erreur start_mission: {str(e)}")
         return jsonify(error=str(e)), 500
     
 # ─────────────────────────────────────────────
@@ -54,8 +57,10 @@ def land():
     try:
         # Lancer le script Python en tâche de fond
         subprocess.Popen(['python3', 'land.py'])
+        logger.info("Script land.py lancé")
         return jsonify(message="Script land.py lancé"), 200
     except Exception as e:
+        logger.error(f"Erreur land: {str(e)}")
         return jsonify(error=str(e)), 500
 
 # ─────────────────────────────────────────────
@@ -66,8 +71,10 @@ def land():
 def return_to_home():
     try:
         subprocess.Popen(['python3', 'return_to_home.py'])
+        logger.info("Script return_to_home.py lancé")
         return jsonify(message="Script return_to_home lancé"), 200
     except Exception as e:
+        logger.error(f"Erreur return_to_home: {str(e)}")
         return jsonify(error=str(e)), 500   
         
 
@@ -94,10 +101,11 @@ def api_create_mission():
 
         # Appel correct avec 4 arguments
         create_mission(filename, altitude_takeoff, waypoints, mode)
-
+        logger.info(f"Mission créée : {filename}, mode={mode}, altitude={altitude_takeoff}")
         return jsonify(message=f"Mission créée dans {filename}"), 200
 
     except Exception as e:
+        logger.error(f"Erreur création mission: {str(e)}")
         return jsonify(error=str(e)), 500
 
 
@@ -111,10 +119,12 @@ def api_create_mission():
 def api_send_mission():
     try:
         if 'file' not in request.files:
+            logger.warning("Aucun fichier reçu pour /mission/send")
             return jsonify(error="Aucun fichier reçu"), 400
 
         file = request.files['file']
         if not file.filename.endswith('.waypoints'):
+            logger.warning("Fichier invalide reçu (pas .waypoints)")
             return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
 
         # Sauvegarder le fichier temporairement
@@ -123,10 +133,11 @@ def api_send_mission():
 
         # Appeler la fonction de mission
         send_mission(filepath)
-
+        logger.info(f"Mission envoyée depuis fichier : {file.filename}")
         return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
 
     except Exception as e:
+        logger.error(f"Erreur envoi mission: {str(e)}")
         return jsonify(error=str(e)), 500
 
 @app.route('/mission/modify', methods=['POST'])
@@ -153,16 +164,18 @@ def api_send_mission():
 # ─────────────────────────────────────────────
 def api_modify_mission():
     try:
-        data = request.get_json()
+        data = request.get_json()   
 
         filename = data.get("filename")
         seq = data.get("seq")
         updates = data.get("updates", {})
 
         if not filename or seq is None or not isinstance(updates, dict):
+            logger.warning("Données invalides pour /mission/modify")
             return jsonify(error="Champs 'filename', 'seq' et 'updates' requis"), 400
 
         modify_mission(filename, int(seq), updates)
+        logger.info(f"Waypoint {seq} modifié dans {filename} avec {updates}")
         return jsonify(message=f"Waypoint {seq} modifié dans {filename}"), 200
 
     except Exception as e:
@@ -177,11 +190,14 @@ def api_modify_mission():
 def flight_info():
     try:
         data = get_flight_info(drone_id)
+        logger.info("Données de vol récupérées avec succès")
         return jsonify(data), 200
     except Exception as e:
+        logger.error(f"Erreur récupération données vol: {str(e)}")
         return jsonify(error=str(e)), 500
 
 if __name__ == '__main__':
+    logger.info("Démarrage de l'API Flask du drone")
     app.run(debug=True)
 
 @app.route('/')
