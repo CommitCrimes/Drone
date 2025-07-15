@@ -130,6 +130,27 @@ def api_send_mission():
         return jsonify(error=str(e)), 500
 
 @app.route('/mission/modify', methods=['POST'])
+
+# ─────────────────────────────────────────────
+# Route POST /mission/modify
+# Modifie un waypoint existant dans un fichier .waypoints
+# Requiert un body JSON contenant :
+# {
+#   "filename": "missions/xxx.waypoints",  ← chemin du fichier
+#   "seq": 3,                              ← numéro du waypoint à modifier
+#   "updates": {                           ← dictionnaire des champs à modifier
+#     "lat": 48.8599,
+#     "lon": 2.2959,
+#     "alt": 140,
+#     "command": 16,
+#     ...
+#   }
+# }
+# Renvoie :
+#   - 200 OK si modification réussie
+#   - 400 si données invalides
+#   - 500 si une erreur interne survient
+# ─────────────────────────────────────────────
 def api_modify_mission():
     try:
         data = request.get_json()

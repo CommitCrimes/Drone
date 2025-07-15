@@ -184,6 +184,30 @@ def send_mission(filename):
     time.sleep(1)
     print("Mission envoyé")
 
+
+# ─────────────────────────────────────────────
+# Fonction : modify_mission
+# But : Modifier un waypoint dans un fichier QGroundControl (.waypoints)
+# Entrées :
+#   - filename : chemin du fichier .waypoints existant
+#   - seq_to_modify : numéro de séquence (int) du waypoint à modifier
+#   - updated_fields : dictionnaire contenant les champs à modifier, par exemple :
+#       {
+#         "lat": 48.8599,
+#         "lon": 2.2959,
+#         "alt": 120,
+#         "command": 16,
+#         "param1": 0,
+#         "frame": 3,
+#         ...
+#       }
+# Comportement :
+#   - Recherche le waypoint avec le numéro de séquence donné
+#   - Met à jour uniquement les champs précisés
+#   - Réécrit le fichier avec les données modifiées
+# Sortie :
+#   - Affiche le résultat dans la console (succès ou erreur)
+# ─────────────────────────────────────────────
 def modify_mission(filename, seq_to_modify, updated_fields):
     """
     Modifie un waypoint dans un fichier .waypoints à partir de son numéro de séquence.
