@@ -26,7 +26,7 @@ pip install flask pymavlink
 
 python app.py
 ```
-## lancer la simulation
+## lancer la simulation (Ceci necessite une instalation et une configuration au préalable)
 cd Projects/drone-sitl/ardupilot/Tools/autotest
 ./sim_vehicle.py  -v ArduCopter -f quad --console --map --out=udp:127.0.0.1:14550
 
