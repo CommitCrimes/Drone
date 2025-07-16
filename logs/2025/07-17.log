@@ -1,0 +1,109 @@
+2025-07-17 00:09:43,396 — INFO — Démarrage de l'API Flask du drone
+2025-07-17 00:09:43,412 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-07-17 00:09:43,413 — INFO — [33mPress CTRL+C to quit[0m
+2025-07-17 00:09:43,414 — INFO —  * Restarting with stat
+2025-07-17 00:09:44,381 — INFO — Démarrage de l'API Flask du drone
+2025-07-17 00:09:44,389 — WARNING —  * Debugger is active!
+2025-07-17 00:09:44,393 — INFO —  * Debugger PIN: 689-952-465
+2025-07-17 00:10:42,980 — INFO — Mode changé vers LAND (ID: 9)
+2025-07-17 00:10:42,981 — INFO — 127.0.0.1 - - [17/Jul/2025 00:10:42] "POST /command HTTP/1.1" 200 -
+2025-07-17 00:11:37,152 — ERROR — Erreur changement de mode: 415 Unsupported Media Type: Did not attempt to load JSON data because the request Content-Type was not 'application/json'.
+2025-07-17 00:11:37,153 — INFO — 127.0.0.1 - - [17/Jul/2025 00:11:37] "[35m[1mPOST /command HTTP/1.1[0m" 500 -
+2025-07-17 00:11:48,000 — WARNING — Champ 'mode' manquant dans /command
+2025-07-17 00:11:48,001 — INFO — 127.0.0.1 - - [17/Jul/2025 00:11:48] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+2025-07-17 00:13:09,581 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/init_log.py', reloading
+2025-07-17 00:13:09,623 — INFO —  * Restarting with stat
+00:13:10 — INFO — Démarrage de l'API Flask du drone
+00:13:10 — WARNING —  * Debugger is active!
+00:13:10 — INFO —  * Debugger PIN: 689-952-465
+00:13:12 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/init_log.py', reloading
+2025-07-17 00:13:12,545 — INFO —  * Restarting with stat
+00:13:13 — INFO — Démarrage de l'API Flask du drone
+00:13:13 — WARNING —  * Debugger is active!
+00:13:13 — INFO —  * Debugger PIN: 689-952-465
+00:15:20 — INFO — Mission envoyée depuis fichier : mission_man.waypoints
+00:15:20 — INFO — 127.0.0.1 - - [17/Jul/2025 00:15:20] "POST /mission/send HTTP/1.1" 200 -
+00:16:50 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+2025-07-17 00:16:50,910 — INFO —  * Restarting with stat
+00:16:51 — INFO — Démarrage de l'API Flask du drone
+00:16:51 — WARNING —  * Debugger is active!
+00:16:51 — INFO —  * Debugger PIN: 689-952-465
+00:16:52 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+2025-07-17 00:16:52,572 — INFO —  * Restarting with stat
+00:16:53 — INFO — Démarrage de l'API Flask du drone
+00:16:53 — WARNING —  * Debugger is active!
+00:16:53 — INFO —  * Debugger PIN: 689-952-465
+00:17:01 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+2025-07-17 00:17:01,714 — INFO —  * Restarting with stat
+00:17:02 — INFO — Démarrage de l'API Flask du drone
+00:17:02 — WARNING —  * Debugger is active!
+00:17:02 — INFO —  * Debugger PIN: 689-952-465
+00:17:09 — INFO — Démarrage de l'API Flask du drone
+00:17:09 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+00:17:09 — INFO — [33mPress CTRL+C to quit[0m
+00:17:09 — INFO —  * Restarting with stat
+00:17:10 — INFO — Démarrage de l'API Flask du drone
+00:17:10 — WARNING —  * Debugger is active!
+00:17:10 — INFO —  * Debugger PIN: 689-952-465
+00:17:33 — INFO — Mission envoyée depuis fichier : mission_man.waypoints
+00:17:33 — INFO — 127.0.0.1 - - [17/Jul/2025 00:17:33] "POST /mission/send HTTP/1.1" 200 -
+00:18:47 — INFO — Script start_mission.py lancé
+00:18:47 — INFO — 127.0.0.1 - - [17/Jul/2025 00:18:47] "POST /start HTTP/1.1" 200 -
+00:20:37 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+00:20:37 — INFO —  * Restarting with stat
+00:20:38 — INFO — Démarrage de l'API Flask du drone
+00:20:38 — WARNING —  * Debugger is active!
+00:20:38 — INFO —  * Debugger PIN: 689-952-465
+00:21:11 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/init_log.py', reloading
+00:21:11 — INFO —  * Restarting with stat
+00:21:12 — INFO — Démarrage de l'API Flask du drone
+00:21:12 — WARNING —  * Debugger is active!
+00:21:12 — INFO —  * Debugger PIN: 689-952-465
+00:21:14 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/init_log.py', reloading
+00:21:14 — INFO —  * Restarting with stat
+00:21:15 — INFO — Démarrage de l'API Flask du drone
+00:21:15 — WARNING —  * Debugger is active!
+00:21:15 — INFO —  * Debugger PIN: 689-952-465
+00:21:25 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/init_log.py', reloading
+00:21:25 — INFO —  * Restarting with stat
+00:21:26 — INFO — Démarrage de l'API Flask du drone
+00:21:26 — WARNING —  * Debugger is active!
+00:21:26 — INFO —  * Debugger PIN: 689-952-465
+00:21:32 — INFO — Mode changé vers LAND (ID: 9)
+00:21:32 — INFO — 127.0.0.1 - - [17/Jul/2025 00:21:32] "POST /command HTTP/1.1" 200 -
+00:21:55 — INFO — Script start_mission.py lancé
+00:21:55 — INFO — 127.0.0.1 - - [17/Jul/2025 00:21:55] "POST /start HTTP/1.1" 200 -
+00:24:09 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+00:24:09 — INFO —  * Restarting with stat
+00:24:10 — INFO — Démarrage de l'API Flask du drone
+00:24:10 — WARNING —  * Debugger is active!
+00:24:10 — INFO —  * Debugger PIN: 689-952-465
+00:24:47 — INFO —  * Detected change in '/mnt/c/Users/arman/delivery/BloodSky/Drone/app.py', reloading
+00:24:47 — INFO —  * Restarting with stat
+00:24:48 — INFO — Démarrage de l'API Flask du drone
+00:29:51 — INFO — Démarrage de l'API Flask du drone
+00:29:51 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+00:29:51 — INFO — [33mPress CTRL+C to quit[0m
+00:29:51 — INFO —  * Restarting with stat
+00:29:52 — INFO — Démarrage de l'API Flask du drone
+00:29:52 — WARNING —  * Debugger is active!
+00:29:52 — INFO —  * Debugger PIN: 689-952-465
+00:30:50 — INFO — mode: dev
+00:30:50 — INFO — mode: dev
+00:30:56 — INFO — Démarrage de l'API Flask du drone
+00:30:56 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+00:30:56 — INFO — [33mPress CTRL+C to quit[0m
+00:31:44 — INFO — mode: prod
+00:31:47 — INFO — Démarrage de l'API Flask du drone
+00:31:47 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+00:31:47 — INFO — [33mPress CTRL+C to quit[0m
+00:32:46 — INFO — Démarrage de l'API Flask du drone
+00:32:46 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+00:32:46 — INFO — [33mPress CTRL+C to quit[0m
+00:32:46 — INFO —  * Restarting with stat

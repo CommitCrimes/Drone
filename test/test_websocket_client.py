@@ -1,3 +1,8 @@
+
+
+
+
+
 import json
 import time
 import websocket
@@ -8,7 +13,6 @@ with open("../config.json") as f:
     config = json.load(f)
     drone_id = config.get("drone_id", 1)
 
-# Connexion MAVLink
 master = mavutil.mavlink_connection('udp:127.0.0.1:14550')
 master.wait_heartbeat()
 print("MAVLink connecté")

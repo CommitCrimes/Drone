@@ -2,27 +2,31 @@ import os
 import logging
 from datetime import datetime
 
-# Date et heure actuelles
+# Préparer dossier et fichier
 now = datetime.now()
-date_str = now.strftime("%Y-%m-%d")     # ex: "2025-07-15"
-time_str = now.strftime("%H-%M-%S")     # ex: "14-23-07"
-
-# Dossier de logs/date
-LOG_DIR = os.path.join("logs", date_str)
-
-# Création du dossier s'il n'existe pas
+year_str = now.strftime("%Y")
+day_str = now.strftime("%m-%d")
+LOG_DIR = os.path.join("logs", year_str)
 os.makedirs(LOG_DIR, exist_ok=True)
-
-# Fichier de log horodaté
-log_filename = f"{time_str}.log"
+log_filename = f"{day_str}.log"
 log_path = os.path.join(LOG_DIR, log_filename)
 
-# Configuration du logger
-logging.basicConfig(
-    filename=log_path,
-    level=logging.INFO,
-    format='%(asctime)s — %(levelname)s — %(message)s'
-)
+# Formatter commun
+formatter = logging.Formatter('%(asctime)s — %(levelname)s — %(message)s', datefmt='%H:%M:%S')
 
-# Logger réutilisable
+# Handler fichier
+file_handler = logging.FileHandler(log_path, mode='a')
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+
+# Logger principal (application)
 logger = logging.getLogger("drone_logger")
+logger.setLevel(logging.INFO)
+if not logger.hasHandlers():
+    logger.addHandler(file_handler)
+
+# Logger HTTP Flask (werkzeug)
+werkzeug_logger = logging.getLogger('werkzeug')
+werkzeug_logger.setLevel(logging.INFO)
+werkzeug_logger.addHandler(file_handler)
+werkzeug_logger.propagate = False  # pour éviter les doublons
