@@ -154,3 +154,36 @@
 11:20:05 — INFO — Mode : dev — port 5000
 11:20:05 — WARNING —  * Debugger is active!
 11:20:05 — INFO —  * Debugger PIN: 146-159-895
+11:20:09 — INFO — Heartbeat MAVLink reçu
+11:20:09 — INFO — Démarrage de l'API Flask du drone
+11:20:09 — INFO — Mode : dev — port 5000
+11:20:09 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+11:20:09 — INFO — [33mPress CTRL+C to quit[0m
+11:20:09 — INFO —  * Restarting with stat
+11:20:10 — INFO — Heartbeat MAVLink reçu
+11:20:10 — INFO — Démarrage de l'API Flask du drone
+11:20:10 — INFO — Mode : dev — port 5000
+11:20:10 — WARNING —  * Debugger is active!
+11:20:10 — INFO —  * Debugger PIN: 146-159-895
+11:20:13 — INFO — Commande de changement de mode envoyée : AUTO
+11:20:13 — INFO — Mode changé vers AUTO (ID: 3)
+11:20:13 — INFO — 127.0.0.1 - - [21/Jul/2025 11:20:13] "POST /command HTTP/1.1" 200 -
+11:20:21 — INFO — Commande de changement de mode envoyée : AUO
+11:20:21 — WARNING — Mode 'AUO' non supporté
+11:20:21 — INFO — 127.0.0.1 - - [21/Jul/2025 11:20:21] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:20:31 — INFO — Commande de changement de mode envoyée : LOITER
+11:20:31 — INFO — Mode changé vers LOITER (ID: 5)
+11:20:31 — INFO — 127.0.0.1 - - [21/Jul/2025 11:20:31] "POST /command HTTP/1.1" 200 -
+11:21:11 — INFO — Données de vol récupérées
+11:21:11 — INFO — 127.0.0.1 - - [21/Jul/2025 11:21:11] "GET /flight_info HTTP/1.1" 200 -
+11:21:11 — INFO — 127.0.0.1 - - [21/Jul/2025 11:21:11] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+11:35:54 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/mavlink_manager.py', reloading
+11:35:54 — INFO —  * Restarting with stat
+11:35:55 — INFO — Heartbeat MAVLink reçu
+11:35:55 — INFO — Démarrage de l'API Flask du drone
+11:35:55 — INFO — Mode : dev — port 5000
+11:35:55 — WARNING —  * Debugger is active!
+11:35:55 — INFO —  * Debugger PIN: 146-159-895
+11:36:26 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/mavlink_manager.py', reloading
+11:36:26 — INFO —  * Restarting with stat
