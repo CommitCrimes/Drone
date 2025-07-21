@@ -2,12 +2,13 @@ import os
 import json
 import subprocess
 from collections import OrderedDict
-from init_log import logger
 from flask import Flask, jsonify, request, Response
+import queue
+from init_log import logger
 
 from get_flight_info import get_flight_info
 from mission_tool import create_mission, send_mission, modify_mission
-from pymavlink import mavutil
+from mavlink_manager import command_queue, status_queue  # communication thread MAVLink
 
 # ─────────────────────────────────────────────
 # Charger la configuration du drone
@@ -16,18 +17,15 @@ with open("config.json", "r") as f:
     config = json.load(f)
 drone_id = config.get("drone_id", "undefined")
 production = config.get("production", "undefined")
+port = config.get("port", 5000)
 
 # ─────────────────────────────────────────────
-# Initialisation de Flask et de MAVLink
+# Initialisation de Flask
 # ─────────────────────────────────────────────
 app = Flask(__name__)
-master = mavutil.mavlink_connection('udp:127.0.0.1:14550')
-master.wait_heartbeat()
 
 # ─────────────────────────────────────────────
 # GET /
-# Test de l’API
-# ─────────────────────────────────────────────
 @app.route('/')
 def hello_world():
     response = OrderedDict()
@@ -37,8 +35,6 @@ def hello_world():
 
 # ─────────────────────────────────────────────
 # POST /start
-# Lance le script de mission
-# ─────────────────────────────────────────────
 @app.route('/start', methods=['POST'])
 def start_mission():
     try:
@@ -51,8 +47,6 @@ def start_mission():
 
 # ─────────────────────────────────────────────
 # POST /rth
-# Retour au point de départ
-# ─────────────────────────────────────────────
 @app.route('/rth', methods=['POST'])
 def return_to_home():
     try:
@@ -65,8 +59,6 @@ def return_to_home():
 
 # ─────────────────────────────────────────────
 # POST /mission/create
-# Crée une mission personnalisée
-# ─────────────────────────────────────────────
 @app.route('/mission/create', methods=['POST'])
 def api_create_mission():
     try:
@@ -86,8 +78,6 @@ def api_create_mission():
 
 # ─────────────────────────────────────────────
 # POST /mission/send
-# Envoie un fichier .waypoints
-# ─────────────────────────────────────────────
 @app.route('/mission/send', methods=['POST'])
 def api_send_mission():
     try:
@@ -113,8 +103,6 @@ def api_send_mission():
 
 # ─────────────────────────────────────────────
 # POST /mission/modify
-# Modifie un waypoint
-# ─────────────────────────────────────────────
 @app.route('/mission/modify', methods=['POST'])
 def api_modify_mission():
     try:
@@ -137,8 +125,6 @@ def api_modify_mission():
 
 # ─────────────────────────────────────────────
 # GET /flight_info
-# Donne les infos de vol en temps réel
-# ─────────────────────────────────────────────
 @app.route('/flight_info', methods=['GET'])
 def flight_info():
     try:
@@ -151,8 +137,6 @@ def flight_info():
 
 # ─────────────────────────────────────────────
 # POST /command
-# Changer le mode de vol (GUIDED, LOITER, etc.)
-# ─────────────────────────────────────────────
 @app.route('/command', methods=['POST'])
 def send_command():
     try:
@@ -163,18 +147,25 @@ def send_command():
             logger.warning("Champ 'mode' manquant dans /command")
             return jsonify(error="Champ 'mode' requis"), 400
 
-        if mode not in master.mode_mapping():
-            logger.warning(f"Mode non supporté : {mode}")
-            return jsonify(error=f"Mode '{mode}' non supporté"), 400
+        command_queue.put({"type": "set_mode", "mode": mode})
+        logger.info(f"Commande de changement de mode envoyée : {mode}")
 
-        mode_id = master.mode_mapping()[mode]
-        master.set_mode(mode_id)
-        logger.info(f"Mode changé vers {mode} (ID: {mode_id})")
-        return jsonify(message=f"Mode changé vers {mode}"), 200
+        # On attend la réponse du thread MAVLink (timeout 3s)
+        try:
+            response = status_queue.get(timeout=3)
+            if response.get("success"):
+                return jsonify(message=response.get("message")), 200
+            else:
+                return jsonify(error=response.get("message")), 400
+        except queue.Empty:
+            logger.error("Timeout — aucune réponse du thread MAVLink")
+            return jsonify(error="Pas de réponse du drone (timeout)"), 504
 
     except Exception as e:
         logger.error(f"Erreur changement de mode: {str(e)}")
         return jsonify(error=str(e)), 500
+
+
 
 # ─────────────────────────────────────────────
 # Lancement de l'application
@@ -182,13 +173,11 @@ def send_command():
 if __name__ == '__main__':
     logger.info("Démarrage de l'API Flask du drone")
     if production == "prod":
-        app.run(debug=False)
-        logger.info(f"mode: {production}")
+        logger.info(f"Mode : prod — port {port}")
+        app.run(debug=False, host='0.0.0.0', port=port)
     elif production == "dev":
-        app.run(debug=True)
-        logger.info(f"mode: {production}")
+        logger.info(f"Mode : dev — port {port}")
+        app.run(debug=True, port=port)
     else:
-        app.run(debug=True)
-        logger.warning(f"Le mode de la configFile n'est ni dev ni prod : {production}")
-
-
+        logger.warning(f"Le mode config n’est ni dev ni prod : {production} — port {port}")
+        app.run(debug=True, port=port)

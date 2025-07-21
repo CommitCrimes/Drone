@@ -1,0 +1,156 @@
+10:53:12 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:53:12 — INFO — Démarrage de l'API Flask du drone
+10:53:12 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:53:12 — INFO — [33mPress CTRL+C to quit[0m
+10:53:12 — INFO —  * Restarting with stat
+10:53:13 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:53:13 — INFO — Démarrage de l'API Flask du drone
+10:53:13 — WARNING —  * Debugger is active!
+10:53:13 — INFO —  * Debugger PIN: 146-159-895
+10:55:08 — INFO — 127.0.0.1 - - [21/Jul/2025 10:55:08] "GET / HTTP/1.1" 200 -
+10:55:08 — INFO — 127.0.0.1 - - [21/Jul/2025 10:55:08] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+10:55:08 — INFO — 127.0.0.1 - - [21/Jul/2025 10:55:08] "GET / HTTP/1.1" 200 -
+10:55:22 — INFO — Données de vol récupérées
+10:55:22 — INFO — 127.0.0.1 - - [21/Jul/2025 10:55:22] "GET /flight_info HTTP/1.1" 200 -
+10:57:23 — INFO — Commande de changement de mode envoyée : LOITER
+10:57:23 — INFO — 127.0.0.1 - - [21/Jul/2025 10:57:23] "POST /command HTTP/1.1" 200 -
+10:57:23 — INFO — Mode changé en LOITER
+10:57:31 — INFO — Commande de changement de mode envoyée : LOITE
+10:57:31 — INFO — 127.0.0.1 - - [21/Jul/2025 10:57:31] "POST /command HTTP/1.1" 200 -
+10:58:37 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/app.py', reloading
+10:58:37 — INFO —  * Restarting with stat
+10:58:38 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:58:38 — INFO — Démarrage de l'API Flask du drone
+10:58:38 — WARNING —  * Debugger is active!
+10:58:38 — INFO —  * Debugger PIN: 146-159-895
+10:58:46 — INFO — Mode : dev
+10:58:46 — INFO — Mode : dev
+10:58:55 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:58:55 — INFO — Démarrage de l'API Flask du drone
+10:58:55 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:58:55 — INFO — [33mPress CTRL+C to quit[0m
+10:58:55 — INFO —  * Restarting with stat
+10:58:56 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:58:56 — INFO — Démarrage de l'API Flask du drone
+10:58:56 — WARNING —  * Debugger is active!
+10:58:56 — INFO —  * Debugger PIN: 146-159-895
+10:59:12 — ERROR — Erreur changement de mode: name 'master' is not defined
+10:59:12 — INFO — 127.0.0.1 - - [21/Jul/2025 10:59:12] "[35m[1mPOST /command HTTP/1.1[0m" 500 -
+10:59:19 — INFO — Mode : dev
+10:59:19 — INFO — Mode : dev
+10:59:21 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:59:21 — INFO — Démarrage de l'API Flask du drone
+10:59:21 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:59:21 — INFO — [33mPress CTRL+C to quit[0m
+10:59:21 — INFO —  * Restarting with stat
+10:59:22 — INFO — Heartbeat reçu — connexion MAVLink OK
+10:59:22 — INFO — Démarrage de l'API Flask du drone
+10:59:22 — WARNING —  * Debugger is active!
+10:59:22 — INFO —  * Debugger PIN: 146-159-895
+10:59:24 — ERROR — Erreur changement de mode: name 'master' is not defined
+10:59:24 — INFO — 127.0.0.1 - - [21/Jul/2025 10:59:24] "[35m[1mPOST /command HTTP/1.1[0m" 500 -
+11:01:24 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/app.py', reloading
+11:01:24 — INFO —  * Restarting with stat
+11:04:02 — INFO — Heartbeat reçu — connexion MAVLink OK
+11:04:02 — INFO — Démarrage de l'API Flask du drone
+11:04:02 — INFO — Mode : dev — port 5000
+11:04:02 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+11:04:02 — INFO — [33mPress CTRL+C to quit[0m
+11:04:02 — INFO —  * Restarting with stat
+11:04:03 — INFO — Heartbeat reçu — connexion MAVLink OK
+11:04:03 — INFO — Démarrage de l'API Flask du drone
+11:04:03 — INFO — Mode : dev — port 5000
+11:04:03 — WARNING —  * Debugger is active!
+11:04:03 — INFO —  * Debugger PIN: 146-159-895
+11:04:22 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:22] "GET / HTTP/1.1" 200 -
+11:04:22 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:22] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+11:04:45 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:45] "GET / HTTP/1.1" 200 -
+11:04:45 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:45] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+11:04:52 — INFO — Données de vol récupérées
+11:04:52 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:52] "GET /flight_info HTTP/1.1" 200 -
+11:04:52 — INFO — 127.0.0.1 - - [21/Jul/2025 11:04:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+11:05:00 — INFO — Commande de changement de mode envoyée : LOITE
+11:05:00 — INFO — 127.0.0.1 - - [21/Jul/2025 11:05:00] "POST /command HTTP/1.1" 200 -
+11:07:45 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/mavlink_manager.py', reloading
+11:07:45 — INFO —  * Restarting with stat
+11:07:46 — INFO — Heartbeat MAVLink reçu
+11:07:46 — INFO — Démarrage de l'API Flask du drone
+11:07:46 — INFO — Mode : dev — port 5000
+11:07:46 — WARNING —  * Debugger is active!
+11:07:46 — INFO —  * Debugger PIN: 146-159-895
+11:08:23 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/app.py', reloading
+11:08:23 — INFO —  * Restarting with stat
+11:08:24 — INFO — Heartbeat MAVLink reçu
+11:08:24 — INFO — Démarrage de l'API Flask du drone
+11:08:24 — INFO — Mode : dev — port 5000
+11:08:24 — WARNING —  * Debugger is active!
+11:08:24 — INFO —  * Debugger PIN: 146-159-895
+11:09:27 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/app.py', reloading
+11:09:27 — INFO —  * Restarting with stat
+11:09:28 — INFO — Heartbeat MAVLink reçu
+11:09:28 — INFO — Démarrage de l'API Flask du drone
+11:09:28 — INFO — Mode : dev — port 5000
+11:09:28 — WARNING —  * Debugger is active!
+11:09:28 — INFO —  * Debugger PIN: 146-159-895
+11:11:52 — INFO — Heartbeat MAVLink reçu
+11:11:52 — INFO — Démarrage de l'API Flask du drone
+11:11:52 — INFO — Mode : dev — port 5000
+11:11:52 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+11:11:52 — INFO — [33mPress CTRL+C to quit[0m
+11:11:52 — INFO —  * Restarting with stat
+11:11:53 — INFO — Heartbeat MAVLink reçu
+11:11:53 — INFO — Démarrage de l'API Flask du drone
+11:11:53 — INFO — Mode : dev — port 5000
+11:11:53 — WARNING —  * Debugger is active!
+11:11:53 — INFO —  * Debugger PIN: 146-159-895
+11:11:58 — INFO — Commande de changement de mode envoyée : LOITE
+11:11:58 — INFO — 127.0.0.1 - - [21/Jul/2025 11:11:58] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:11:58 — WARNING — Mode 'LOITE' non supporté
+11:12:12 — INFO — Commande de changement de mode envoyée : LOITER
+11:12:12 — INFO — 127.0.0.1 - - [21/Jul/2025 11:12:12] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:12:12 — INFO — Mode changé vers LOITER (ID: 5)
+11:12:44 — INFO — Commande de changement de mode envoyée : AUTO
+11:12:44 — INFO — 127.0.0.1 - - [21/Jul/2025 11:12:44] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:12:44 — INFO — Mode changé vers AUTO (ID: 3)
+11:12:51 — INFO — Commande de changement de mode envoyée : AUTO
+11:12:51 — INFO — Mode changé vers AUTO (ID: 3)
+11:12:51 — INFO — 127.0.0.1 - - [21/Jul/2025 11:12:51] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:12:57 — INFO — Commande de changement de mode envoyée : AUTO
+11:12:57 — INFO — 127.0.0.1 - - [21/Jul/2025 11:12:57] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:12:57 — INFO — Mode changé vers AUTO (ID: 3)
+11:13:00 — INFO — Commande de changement de mode envoyée : AUTO
+11:13:00 — INFO — 127.0.0.1 - - [21/Jul/2025 11:13:00] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:13:00 — INFO — Mode changé vers AUTO (ID: 3)
+11:13:01 — INFO — Commande de changement de mode envoyée : AUTO
+11:13:01 — INFO — 127.0.0.1 - - [21/Jul/2025 11:13:01] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:13:01 — INFO — Mode changé vers AUTO (ID: 3)
+11:19:41 — INFO — Heartbeat MAVLink reçu
+11:19:42 — INFO — Démarrage de l'API Flask du drone
+11:19:42 — INFO — Mode : dev — port 5000
+11:19:42 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+11:19:42 — INFO — [33mPress CTRL+C to quit[0m
+11:19:42 — INFO —  * Restarting with stat
+11:19:42 — INFO — Heartbeat MAVLink reçu
+11:19:43 — INFO — Démarrage de l'API Flask du drone
+11:19:43 — INFO — Mode : dev — port 5000
+11:19:43 — WARNING —  * Debugger is active!
+11:19:43 — INFO —  * Debugger PIN: 146-159-895
+11:19:47 — INFO — Commande de changement de mode envoyée : AUTO
+11:19:47 — INFO — 127.0.0.1 - - [21/Jul/2025 11:19:47] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:19:47 — INFO — Mode changé vers AUTO (ID: 3)
+11:19:50 — INFO — Commande de changement de mode envoyée : AUTO
+11:19:50 — INFO — 127.0.0.1 - - [21/Jul/2025 11:19:50] "[31m[1mPOST /command HTTP/1.1[0m" 400 -
+11:19:50 — INFO — Mode changé vers AUTO (ID: 3)
+11:20:03 — INFO —  * Detected change in '/mnt/c/Users/maury/Documents/Projet perso/Drone/mavlink_manager.py', reloading
+11:20:03 — INFO —  * Restarting with stat
+11:20:05 — INFO — Heartbeat MAVLink reçu
+11:20:05 — INFO — Démarrage de l'API Flask du drone
+11:20:05 — INFO — Mode : dev — port 5000
+11:20:05 — WARNING —  * Debugger is active!
+11:20:05 — INFO —  * Debugger PIN: 146-159-895

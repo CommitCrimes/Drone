@@ -1,3 +1,1 @@
-{"drone_id": 1,
-"production": "dev"
-}
+{ "drone_id": 1, "production": "dev", "port": 5000 }
