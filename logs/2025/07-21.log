@@ -1,0 +1,22 @@
+16:32:56 — INFO — Connexion MAVLink en cours...
+16:32:57 — INFO — Heartbeat MAVLink reçu
+16:32:57 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:32:57 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+16:32:57 — INFO — [33mPress CTRL+C to quit[0m
+16:32:57 — INFO —  * Restarting with stat
+16:32:57 — INFO — Connexion MAVLink en cours...
+16:32:58 — INFO — Heartbeat MAVLink reçu
+16:32:58 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:32:58 — WARNING —  * Debugger is active!
+16:32:58 — INFO —  * Debugger PIN: 534-543-481
+16:33:21 — INFO — Mission envoyée depuis fichier : mission_auto.waypoints
+16:33:21 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:21] "POST /mission/send HTTP/1.1" 200 -
+16:33:26 — INFO — Script start_mission.py lancé
+16:33:26 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:26] "POST /start HTTP/1.1" 200 -
+16:33:29 — INFO — Données de vol récupérées
+16:33:29 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:29] "GET /flight_info HTTP/1.1" 200 -
+16:33:38 — INFO — Mode changé vers RTL
+16:33:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:38] "POST /command HTTP/1.1" 200 -
+16:33:43 — INFO — Données de vol récupérées
+16:33:43 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:43] "GET /flight_info HTTP/1.1" 200 -
