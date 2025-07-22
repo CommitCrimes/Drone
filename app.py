@@ -4,7 +4,8 @@ import subprocess
 from collections import OrderedDict
 from flask import Flask, jsonify, request, Response
 
-from get_flight_info import get_flight_info
+from get_flight_info import flight_info
+from start_mission import start
 from mission_tool import create_mission, send_mission, modify_mission
 from pymavlink import mavutil
 
@@ -41,7 +42,7 @@ def hello_world():
 @app.route('/start', methods=['POST'])
 def start_mission():
     try:
-        subprocess.Popen(['python3', 'start_mission.py'])
+        start(master)
         logger.info("Script start_mission.py lancé")
         return jsonify(message="Script start_mission.py lancé"), 200
     except Exception as e:
@@ -59,7 +60,7 @@ def api_create_mission():
         waypoints = data.get("waypoints", [])
         mode = data.get("mode", "auto")
 
-        create_mission(filename, altitude_takeoff, waypoints, mode)
+        create_mission(filename, altitude_takeoff, waypoints, mode, master)
         logger.info(f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}")
         return jsonify(message=f"Mission créée dans {filename}"), 200
 
@@ -117,9 +118,9 @@ def api_modify_mission():
 # ─────────────────────────────────────────────
 # GET /flight_info
 @app.route('/flight_info', methods=['GET'])
-def flight_info():
+def api_flight_info():
     try:
-        data = get_flight_info(drone_id)
+        data = flight_info(drone_id, master)
         logger.info("Données de vol récupérées")
         return jsonify(data), 200
     except Exception as e:

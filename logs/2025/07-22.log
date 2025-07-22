@@ -1,0 +1,131 @@
+10:20:15 — INFO — Connexion MAVLink en cours...
+10:20:16 — INFO — Heartbeat MAVLink reçu
+10:20:16 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:20:16 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:20:16 — INFO — [33mPress CTRL+C to quit[0m
+10:20:16 — INFO —  * Restarting with stat
+10:20:16 — INFO — Connexion MAVLink en cours...
+10:20:17 — INFO — Heartbeat MAVLink reçu
+10:20:17 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:20:17 — WARNING —  * Debugger is active!
+10:20:17 — INFO —  * Debugger PIN: 732-304-903
+10:21:01 — ERROR — Erreur start_mission: start_mission() takes 0 positional arguments but 1 was given
+10:21:01 — INFO — 127.0.0.1 - - [22/Jul/2025 10:21:01] "[35m[1mPOST /start HTTP/1.1[0m" 500 -
+10:22:37 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/start_mission.py', reloading
+10:22:37 — INFO —  * Restarting with stat
+10:23:00 — INFO — Connexion MAVLink en cours...
+10:23:00 — INFO — Heartbeat MAVLink reçu
+10:23:00 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:23:00 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:23:00 — INFO — [33mPress CTRL+C to quit[0m
+10:23:00 — INFO —  * Restarting with stat
+10:23:01 — INFO — Connexion MAVLink en cours...
+10:23:01 — INFO — Heartbeat MAVLink reçu
+10:23:01 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:23:01 — WARNING —  * Debugger is active!
+10:23:01 — INFO —  * Debugger PIN: 732-304-903
+10:23:38 — INFO — Connexion MAVLink en cours...
+10:23:38 — INFO — Heartbeat MAVLink reçu
+10:23:38 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:23:38 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:23:38 — INFO — [33mPress CTRL+C to quit[0m
+10:23:38 — INFO —  * Restarting with stat
+10:23:39 — INFO — Connexion MAVLink en cours...
+10:23:39 — INFO — Heartbeat MAVLink reçu
+10:23:39 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:23:39 — WARNING —  * Debugger is active!
+10:23:39 — INFO —  * Debugger PIN: 732-304-903
+10:23:46 — INFO — Données de vol récupérées
+10:23:46 — INFO — 127.0.0.1 - - [22/Jul/2025 10:23:46] "GET /flight_info HTTP/1.1" 200 -
+10:23:54 — INFO — Mode changé vers RTL
+10:23:54 — INFO — 127.0.0.1 - - [22/Jul/2025 10:23:54] "POST /command HTTP/1.1" 200 -
+10:24:01 — INFO — Données de vol récupérées
+10:24:01 — INFO — 127.0.0.1 - - [22/Jul/2025 10:24:01] "GET /flight_info HTTP/1.1" 200 -
+10:24:26 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/get_flight_info.py', reloading
+10:24:26 — INFO — Connexion MAVLink en cours...
+10:24:27 — INFO — Heartbeat MAVLink reçu
+10:24:27 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:24:27 — WARNING —  * Debugger is active!
+10:24:27 — INFO —  * Debugger PIN: 732-304-903
+10:25:31 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/get_flight_info.py', reloading
+10:25:32 — INFO — Connexion MAVLink en cours...
+10:25:32 — INFO — Heartbeat MAVLink reçu
+10:25:32 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:25:32 — WARNING —  * Debugger is active!
+10:25:32 — INFO —  * Debugger PIN: 732-304-903
+10:26:07 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/get_flight_info.py', reloading
+10:26:08 — INFO — Connexion MAVLink en cours...
+10:26:08 — INFO — Heartbeat MAVLink reçu
+10:26:08 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:26:08 — WARNING —  * Debugger is active!
+10:26:08 — INFO —  * Debugger PIN: 732-304-903
+10:26:23 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/get_flight_info.py', reloading
+10:56:25 — INFO — Connexion MAVLink en cours...
+10:56:25 — INFO — Heartbeat MAVLink reçu
+10:56:25 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:56:25 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+10:56:25 — INFO — [33mPress CTRL+C to quit[0m
+10:56:25 — INFO —  * Restarting with stat
+10:56:28 — INFO — Connexion MAVLink en cours...
+10:56:28 — INFO — Heartbeat MAVLink reçu
+10:56:28 — INFO — Démarrage de l'API Flask du drone (mode debug)
+10:56:28 — WARNING —  * Debugger is active!
+10:56:28 — INFO —  * Debugger PIN: 732-304-903
+10:57:11 — INFO — Données de vol récupérées
+10:57:11 — INFO — 127.0.0.1 - - [22/Jul/2025 10:57:11] "GET /flight_info HTTP/1.1" 200 -
+10:58:44 — INFO — Données de vol récupérées
+10:58:44 — INFO — 127.0.0.1 - - [22/Jul/2025 10:58:44] "GET /flight_info HTTP/1.1" 200 -
+10:58:54 — INFO — Mode changé vers RTL
+10:58:54 — INFO — 127.0.0.1 - - [22/Jul/2025 10:58:54] "POST /command HTTP/1.1" 200 -
+10:59:02 — INFO — Données de vol récupérées
+10:59:02 — INFO — 127.0.0.1 - - [22/Jul/2025 10:59:02] "GET /flight_info HTTP/1.1" 200 -
+11:00:04 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+11:00:04 — INFO — 127.0.0.1 - - [22/Jul/2025 11:00:04] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+11:00:13 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+11:00:13 — INFO — 127.0.0.1 - - [22/Jul/2025 11:00:13] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+11:00:32 — INFO — Données de vol récupérées
+11:00:32 — INFO — 127.0.0.1 - - [22/Jul/2025 11:00:32] "GET /flight_info HTTP/1.1" 200 -
+11:01:12 — INFO — Script start_mission.py lancé
+11:01:12 — INFO — 127.0.0.1 - - [22/Jul/2025 11:01:12] "POST /start HTTP/1.1" 200 -
+11:01:13 — INFO — Script start_mission.py lancé
+11:01:13 — INFO — 127.0.0.1 - - [22/Jul/2025 11:01:13] "POST /start HTTP/1.1" 200 -
+11:01:30 — INFO —  * Detected change in '/mnt/c/Users/maury/SynologyDrive/epitech/Projet/Drone/start_mission.py', reloading
+11:01:31 — INFO — Connexion MAVLink en cours...
+11:01:31 — INFO — Heartbeat MAVLink reçu
+11:01:31 — INFO — Démarrage de l'API Flask du drone (mode debug)
+11:01:31 — WARNING —  * Debugger is active!
+11:01:31 — INFO —  * Debugger PIN: 732-304-903
+11:01:41 — INFO — Connexion MAVLink en cours...
+11:01:42 — INFO — Heartbeat MAVLink reçu
+11:01:42 — INFO — Démarrage de l'API Flask du drone (mode debug)
+11:01:42 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+11:01:42 — INFO — [33mPress CTRL+C to quit[0m
+11:01:42 — INFO —  * Restarting with stat
+11:01:42 — INFO — Connexion MAVLink en cours...
+11:01:43 — INFO — Heartbeat MAVLink reçu
+11:01:43 — INFO — Démarrage de l'API Flask du drone (mode debug)
+11:01:43 — WARNING —  * Debugger is active!
+11:01:43 — INFO —  * Debugger PIN: 732-304-903
+11:01:54 — INFO — Script start_mission.py lancé
+11:01:54 — INFO — 127.0.0.1 - - [22/Jul/2025 11:01:54] "POST /start HTTP/1.1" 200 -
+11:01:59 — INFO — Données de vol récupérées
+11:01:59 — INFO — 127.0.0.1 - - [22/Jul/2025 11:01:59] "GET /flight_info HTTP/1.1" 200 -
+11:02:02 — INFO — Données de vol récupérées
+11:02:02 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:02] "GET /flight_info HTTP/1.1" 200 -
+11:02:04 — INFO — Données de vol récupérées
+11:02:04 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:04] "GET /flight_info HTTP/1.1" 200 -
+11:02:08 — INFO — Données de vol récupérées
+11:02:08 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:08] "GET /flight_info HTTP/1.1" 200 -
+11:02:14 — INFO — Mode changé vers RTL
+11:02:14 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:14] "POST /command HTTP/1.1" 200 -
+11:02:16 — INFO — Données de vol récupérées
+11:02:16 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:16] "GET /flight_info HTTP/1.1" 200 -
+11:02:19 — INFO — Données de vol récupérées
+11:02:19 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:19] "GET /flight_info HTTP/1.1" 200 -
+11:02:20 — INFO — Données de vol récupérées
+11:02:20 — INFO — 127.0.0.1 - - [22/Jul/2025 11:02:20] "GET /flight_info HTTP/1.1" 200 -
