@@ -6,3 +6,7 @@ env/
 # Fichiers compilés Python
 __pycache__/
 *.py[cod]
+
+# Ignorer tout le dossier logs, y compris les sous-dossiers
+logs/
+*.log

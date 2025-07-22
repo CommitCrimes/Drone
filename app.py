@@ -60,7 +60,7 @@ def api_create_mission():
         waypoints = data.get("waypoints", [])
         mode = data.get("mode", "auto")
 
-        create_mission(filename, altitude_takeoff, waypoints, mode, master)
+        create_mission(master, filename, altitude_takeoff, waypoints, mode)
         logger.info(f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}")
         return jsonify(message=f"Mission créée dans {filename}"), 200
 
@@ -85,7 +85,7 @@ def api_send_mission():
         filepath = os.path.join('/tmp', file.filename)
         file.save(filepath)
 
-        send_mission(filepath)
+        send_mission(filepath, master)
         logger.info(f"Mission envoyée depuis fichier : {file.filename}")
         return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
 

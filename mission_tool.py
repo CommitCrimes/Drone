@@ -26,7 +26,7 @@ drone_id = config["drone_id"]
 # Sortie :
 #   - Écrit le fichier .waypoints prêt à être envoyé
 # ─────────────────────────────────────────────
-def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", master=None):
+def create_mission(master, filename, altitude_takeoff, waypoints=None, mode="auto"):
     mission_waypoints = []
     
     if mode == "man":
@@ -35,10 +35,10 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", mast
         mission_waypoints = waypoints
 
     else:
-        flight_info = flight_info(drone_id, master)
-        latitude = flight_info["latitude"]
-        longitude = flight_info["longitude"]
-        altitude = flight_info.get("altitude", altitude_takeoff)
+        get_flight_info = flight_info(drone_id, master)
+        latitude = get_flight_info["latitude"]
+        longitude = get_flight_info["longitude"]
+        altitude = get_flight_info.get("altitude", altitude_takeoff)
 
         mission_waypoints.append({
             "seq": 0,
@@ -111,7 +111,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", mast
 #   - Définit le point courant à 0
 # ─────────────────────────────────────────────
 
-def send_mission(filename):
+def send_mission(filename, master=None):
     print(f"Chargement du fichier .waypoints : {filename}")
 
     # Lire et parser les waypoints depuis fichier texte
