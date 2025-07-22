@@ -1,23 +1,23 @@
-## Documentation – `create_mission` dans `mission_tool.py`
+# Documentation – `create_mission` dans `mission_tool.py`
 
-### Objectif
+## Objectif
 
-La fonction `create_mission` permet de générer un fichier de mission `.waypoints` compatible avec **QGroundControl (QGC)**.  
+La fonction `create_mission` permet de générer un fichier de mission `.waypoints` compatible avec **QGroundControl (QGC)**.
 Ce fichier contient la séquence de points GPS à suivre par un drone via MAVLink.
 
 ---
 
-### Format de fichier généré
+## Format de fichier généré
 
 Chaque fichier `.waypoints` commence par l’en-tête :
 
-```
+```txt
 QGC WPL 110
 ```
 
 Puis chaque ligne décrit un waypoint :
 
-```
+```txt
 seq    current    frame    command    param1    param2    param3    param4    lat    lon    alt    autoContinue
 ```
 
@@ -35,9 +35,9 @@ seq    current    frame    command    param1    param2    param3    param4    la
 
 ---
 
-### Modes d’utilisation
+## Modes d’utilisation
 
-#### 🔹 Mode `auto` (par défaut)
+### 🔹 Mode `auto` (par défaut)
 
 - Utilise automatiquement la position actuelle du drone (via `get_flight_info(drone_id)`).
 - Crée automatiquement :
@@ -48,7 +48,7 @@ seq    current    frame    command    param1    param2    param3    param4    la
 
 🔸 Remarque : le dernier point est **toujours forcé à LAND** en mode auto.
 
-#### 🔹 Mode `man`
+### 🔹 Mode `man`
 
 - Tous les points sont fournis manuellement via `waypoints`.
 - Aucun ajout automatique (ni Home, ni Takeoff, ni Land).
@@ -56,9 +56,10 @@ seq    current    frame    command    param1    param2    param3    param4    la
 
 ---
 
-### Exemples de JSON utilisés avec l’API ou en ligne de commande
+## Exemples de JSON utilisés avec l’API ou en ligne de commande
 
-#### Mode `auto` avec 1 waypoint cible :
+### Mode `auto` avec 1 waypoint cible
+
 ```json
 {
   "filename": "missions/mission_auto.waypoints",
@@ -74,7 +75,8 @@ seq    current    frame    command    param1    param2    param3    param4    la
 }
 ```
 
-#### Mode `man` avec 4 points définis :
+### Mode `man` avec 4 points définis
+
 ```json
 {
   "filename": "missions/mission_man.waypoints",
@@ -143,7 +145,7 @@ seq    current    frame    command    param1    param2    param3    param4    la
 
 ---
 
-### Ligne de commande (CLI)
+## Ligne de commande (CLI)
 
 ```bash
 python mission_tool.py create mission_auto.json
@@ -157,7 +159,7 @@ python mission_tool.py send missions/mission_auto.waypoints
 
 ---
 
-### Résumé des commandes MAVLink utilisées
+## Résumé des commandes MAVLink utilisées
 
 | Commande | Description            |
 |----------|------------------------|
@@ -167,7 +169,7 @@ python mission_tool.py send missions/mission_auto.waypoints
 
 ---
 
-### Personnalisation avancée
+## Personnalisation avancée
 
 Tu peux appeler la fonction directement depuis Python :
 
