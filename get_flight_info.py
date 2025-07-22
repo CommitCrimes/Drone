@@ -18,6 +18,7 @@ def flight_info(drone_id, master):
         voltage = sys_status.voltage_battery / 1000.0  # en volts
         current = sys_status.current_battery / 100.0   # en ampères
         battery_remaining = sys_status.battery_remaining  # en %
+        
     else:
         voltage = None
         current = None
@@ -27,6 +28,10 @@ def flight_info(drone_id, master):
         vx = msg.vx / 100.0  # m/s
         vy = msg.vy / 100.0  # m/s
         vz = msg.vz / 100.0  # m/s
+        track_rad = math.atan2(vy, vx)
+        track_deg = math.degrees(track_rad)
+        if track_deg < 0:
+            track_deg += 360.0
 
         return {
             "drone_id": str(drone_id),
@@ -38,6 +43,7 @@ def flight_info(drone_id, master):
             "horizontal_speed_m_s": round(math.sqrt(vx**2 + vy**2), 2),
             "vertical_speed_m_s": round(vz, 2),
             "heading_deg": msg.hdg / 100.0,
+            "movement_track_deg": round(track_deg, 2),
             # "battery_voltage_V": voltage,
             # "battery_current_A": current,
             "battery_remaining_percent": battery_remaining
