@@ -89,7 +89,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
             mission_waypoints[-1]["command"] = 21
             mission_waypoints[-1]["alt"] = 0
 
-    with open(filename, "w") as f:
+    with open("missions/"+filename, "w") as f:
         f.write("QGC WPL 110\n")
         for wp in mission_waypoints:
             line = (
@@ -98,7 +98,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
                 f"{wp['lat']:.8f}\t{wp['lon']:.8f}\t{wp['alt']:.6f}\t{wp['autoContinue']}\n"
             )
             f.write(line)
-    print(f"Mission .waypoints créée : {filename}")
+    print(f"Mission .waypoints créée missions/: {filename}")
 
 # ─────────────────────────────────────────────
 # Fonction : send_mission
