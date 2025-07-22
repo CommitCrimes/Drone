@@ -1,7 +1,7 @@
 import json
 import sys
 from pymavlink import mavutil
-from get_flight_info import get_flight_info
+from get_flight_info import flight_info
 import time
 
 
@@ -26,7 +26,7 @@ drone_id = config["drone_id"]
 # Sortie :
 #   - Écrit le fichier .waypoints prêt à être envoyé
 # ─────────────────────────────────────────────
-def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
+def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", master=None):
     mission_waypoints = []
     
     if mode == "man":
@@ -35,7 +35,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto"):
         mission_waypoints = waypoints
 
     else:
-        flight_info = get_flight_info(drone_id)
+        flight_info = flight_info(drone_id, master)
         latitude = flight_info["latitude"]
         longitude = flight_info["longitude"]
         altitude = flight_info.get("altitude", altitude_takeoff)
@@ -142,11 +142,6 @@ def send_mission(filename):
             "autoContinue": int(parts[11])
         }
         waypoints.append(wp)
-
-    # Connexion MAVLink
-    master = mavutil.mavlink_connection('udp:127.0.0.1:14550')
-    master.wait_heartbeat()
-    print(f"Connecté à {master.target_system}/{master.target_component}")
 
     # Efface l'ancienne mission
     master.waypoint_clear_all_send()
