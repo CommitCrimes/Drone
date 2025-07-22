@@ -59,7 +59,7 @@ def start(master):
     #         print("Drone désarmé, fin de mission détectée.")
     #         break
 
-    # # Notification vers ton backend
+    # Notification vers ton backend
     # try:
     #     print("Notification envoyée. Code HTTP:")
     #     # import requests
