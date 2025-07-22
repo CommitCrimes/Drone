@@ -60,8 +60,8 @@ def api_create_mission():
         mode = data.get("mode", "auto")
 
         create_mission(filename, altitude_takeoff, waypoints, mode)
-        logger.info(f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}")
-        return jsonify(message=f"Mission créée dans {filename}"), 200
+        logger.info(f"Mission créée : missions/{filename}, altitude={altitude_takeoff}, mode={mode}")
+        return jsonify(message=f"Mission créée dans missions/{filename}"), 200
 
     except Exception as e:
         logger.error(f"Erreur création mission: {str(e)}")

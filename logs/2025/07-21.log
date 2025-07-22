@@ -20,3 +20,687 @@
 16:33:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:38] "POST /command HTTP/1.1" 200 -
 16:33:43 — INFO — Données de vol récupérées
 16:33:43 — INFO — 127.0.0.1 - - [21/Jul/2025 16:33:43] "GET /flight_info HTTP/1.1" 200 -
+16:44:06 — INFO — Connexion MAVLink en cours...
+16:44:06 — INFO — Heartbeat MAVLink reçu
+16:44:06 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:44:06 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+16:44:06 — INFO — [33mPress CTRL+C to quit[0m
+16:44:06 — INFO —  * Restarting with stat
+16:44:06 — INFO — Connexion MAVLink en cours...
+16:44:07 — INFO — Heartbeat MAVLink reçu
+16:44:07 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:44:07 — WARNING —  * Debugger is active!
+16:44:07 — INFO —  * Debugger PIN: 534-543-481
+16:46:42 — INFO — Données de vol récupérées
+16:46:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:42] "GET /flight_info HTTP/1.1" 200 -
+16:46:46 — INFO — Données de vol récupérées
+16:46:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:46] "GET /flight_info HTTP/1.1" 200 -
+16:46:50 — INFO — Données de vol récupérées
+16:46:50 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:50] "GET /flight_info HTTP/1.1" 200 -
+16:46:53 — INFO — Données de vol récupérées
+16:46:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:53] "GET /flight_info HTTP/1.1" 200 -
+16:46:54 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+16:46:54 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:54] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+16:46:57 — INFO — Données de vol récupérées
+16:46:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:46:57] "GET /flight_info HTTP/1.1" 200 -
+16:47:01 — INFO — Données de vol récupérées
+16:47:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:02] "GET /flight_info HTTP/1.1" 200 -
+16:47:07 — INFO — Données de vol récupérées
+16:47:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:07] "GET /flight_info HTTP/1.1" 200 -
+16:47:10 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+16:47:10 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:10] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+16:47:11 — INFO — Données de vol récupérées
+16:47:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:11] "GET /flight_info HTTP/1.1" 200 -
+16:47:16 — INFO — Données de vol récupérées
+16:47:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:16] "GET /flight_info HTTP/1.1" 200 -
+16:47:21 — INFO — Données de vol récupérées
+16:47:21 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:21] "GET /flight_info HTTP/1.1" 200 -
+16:47:25 — INFO — Données de vol récupérées
+16:47:25 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:25] "GET /flight_info HTTP/1.1" 200 -
+16:47:31 — INFO — Données de vol récupérées
+16:47:31 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:31] "GET /flight_info HTTP/1.1" 200 -
+16:47:37 — INFO — Données de vol récupérées
+16:47:37 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:37] "GET /flight_info HTTP/1.1" 200 -
+16:47:41 — INFO — Données de vol récupérées
+16:47:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:41] "GET /flight_info HTTP/1.1" 200 -
+16:47:47 — INFO — Données de vol récupérées
+16:47:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:47] "GET /flight_info HTTP/1.1" 200 -
+16:47:52 — INFO — Données de vol récupérées
+16:47:52 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:52] "GET /flight_info HTTP/1.1" 200 -
+16:47:55 — INFO — Données de vol récupérées
+16:47:55 — INFO — 127.0.0.1 - - [21/Jul/2025 16:47:55] "GET /flight_info HTTP/1.1" 200 -
+16:48:00 — INFO — Données de vol récupérées
+16:48:00 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:00] "GET /flight_info HTTP/1.1" 200 -
+16:48:07 — INFO — Données de vol récupérées
+16:48:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:07] "GET /flight_info HTTP/1.1" 200 -
+16:48:11 — INFO — Données de vol récupérées
+16:48:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:11] "GET /flight_info HTTP/1.1" 200 -
+16:48:16 — INFO — Données de vol récupérées
+16:48:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:16] "GET /flight_info HTTP/1.1" 200 -
+16:48:22 — INFO — Données de vol récupérées
+16:48:22 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:22] "GET /flight_info HTTP/1.1" 200 -
+16:48:27 — INFO — Données de vol récupérées
+16:48:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:27] "GET /flight_info HTTP/1.1" 200 -
+16:48:30 — INFO — Données de vol récupérées
+16:48:30 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:30] "GET /flight_info HTTP/1.1" 200 -
+16:48:37 — INFO — Données de vol récupérées
+16:48:37 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:37] "GET /flight_info HTTP/1.1" 200 -
+16:48:41 — INFO — Données de vol récupérées
+16:48:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:41] "GET /flight_info HTTP/1.1" 200 -
+16:48:46 — INFO — Données de vol récupérées
+16:48:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:46] "GET /flight_info HTTP/1.1" 200 -
+16:48:52 — INFO — Données de vol récupérées
+16:48:52 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:52] "GET /flight_info HTTP/1.1" 200 -
+16:48:56 — INFO — Données de vol récupérées
+16:48:56 — INFO — 127.0.0.1 - - [21/Jul/2025 16:48:56] "GET /flight_info HTTP/1.1" 200 -
+16:49:02 — INFO — Données de vol récupérées
+16:49:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:02] "GET /flight_info HTTP/1.1" 200 -
+16:49:06 — INFO — Données de vol récupérées
+16:49:06 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:06] "GET /flight_info HTTP/1.1" 200 -
+16:49:12 — INFO — Données de vol récupérées
+16:49:12 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:12] "GET /flight_info HTTP/1.1" 200 -
+16:49:16 — INFO — Données de vol récupérées
+16:49:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:16] "GET /flight_info HTTP/1.1" 200 -
+16:49:22 — INFO — Données de vol récupérées
+16:49:22 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:22] "GET /flight_info HTTP/1.1" 200 -
+16:49:26 — INFO — Données de vol récupérées
+16:49:26 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:26] "GET /flight_info HTTP/1.1" 200 -
+16:49:31 — INFO — Données de vol récupérées
+16:49:31 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:31] "GET /flight_info HTTP/1.1" 200 -
+16:49:37 — INFO — Données de vol récupérées
+16:49:37 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:37] "GET /flight_info HTTP/1.1" 200 -
+16:49:43 — INFO — Données de vol récupérées
+16:49:43 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:43] "GET /flight_info HTTP/1.1" 200 -
+16:49:46 — INFO — Données de vol récupérées
+16:49:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:46] "GET /flight_info HTTP/1.1" 200 -
+16:49:53 — INFO — Données de vol récupérées
+16:49:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:53] "GET /flight_info HTTP/1.1" 200 -
+16:49:56 — INFO — Données de vol récupérées
+16:49:56 — INFO — 127.0.0.1 - - [21/Jul/2025 16:49:56] "GET /flight_info HTTP/1.1" 200 -
+16:50:01 — INFO — Données de vol récupérées
+16:50:01 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:01] "GET /flight_info HTTP/1.1" 200 -
+16:50:07 — INFO — Données de vol récupérées
+16:50:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:07] "GET /flight_info HTTP/1.1" 200 -
+16:50:11 — INFO — Données de vol récupérées
+16:50:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:11] "GET /flight_info HTTP/1.1" 200 -
+16:50:18 — INFO — Données de vol récupérées
+16:50:18 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:18] "GET /flight_info HTTP/1.1" 200 -
+16:50:23 — INFO — Données de vol récupérées
+16:50:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:23] "GET /flight_info HTTP/1.1" 200 -
+16:50:26 — INFO — Données de vol récupérées
+16:50:26 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:26] "GET /flight_info HTTP/1.1" 200 -
+16:50:31 — INFO — Données de vol récupérées
+16:50:31 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:31] "GET /flight_info HTTP/1.1" 200 -
+16:50:37 — INFO — Données de vol récupérées
+16:50:37 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:37] "GET /flight_info HTTP/1.1" 200 -
+16:50:41 — INFO — Données de vol récupérées
+16:50:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:41] "GET /flight_info HTTP/1.1" 200 -
+16:50:46 — INFO — Données de vol récupérées
+16:50:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:46] "GET /flight_info HTTP/1.1" 200 -
+16:50:53 — INFO — Données de vol récupérées
+16:50:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:53] "GET /flight_info HTTP/1.1" 200 -
+16:50:57 — INFO — Données de vol récupérées
+16:50:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:50:57] "GET /flight_info HTTP/1.1" 200 -
+16:51:02 — INFO — Données de vol récupérées
+16:51:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:02] "GET /flight_info HTTP/1.1" 200 -
+16:51:07 — INFO — Données de vol récupérées
+16:51:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:07] "GET /flight_info HTTP/1.1" 200 -
+16:51:11 — INFO — Données de vol récupérées
+16:51:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:11] "GET /flight_info HTTP/1.1" 200 -
+16:51:16 — INFO — Données de vol récupérées
+16:51:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:16] "GET /flight_info HTTP/1.1" 200 -
+16:51:23 — INFO — Données de vol récupérées
+16:51:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:23] "GET /flight_info HTTP/1.1" 200 -
+16:51:27 — INFO — Données de vol récupérées
+16:51:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:27] "GET /flight_info HTTP/1.1" 200 -
+16:51:32 — INFO — Données de vol récupérées
+16:51:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:32] "GET /flight_info HTTP/1.1" 200 -
+16:51:38 — INFO — Données de vol récupérées
+16:51:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:38] "GET /flight_info HTTP/1.1" 200 -
+16:51:41 — INFO — Données de vol récupérées
+16:51:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:41] "GET /flight_info HTTP/1.1" 200 -
+16:51:46 — INFO — Données de vol récupérées
+16:51:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:46] "GET /flight_info HTTP/1.1" 200 -
+16:51:52 — INFO — Données de vol récupérées
+16:51:52 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:52] "GET /flight_info HTTP/1.1" 200 -
+16:51:57 — INFO — Données de vol récupérées
+16:51:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:51:57] "GET /flight_info HTTP/1.1" 200 -
+16:52:02 — INFO — Données de vol récupérées
+16:52:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:02] "GET /flight_info HTTP/1.1" 200 -
+16:52:08 — INFO — Données de vol récupérées
+16:52:08 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:08] "GET /flight_info HTTP/1.1" 200 -
+16:52:12 — INFO — Données de vol récupérées
+16:52:12 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:12] "GET /flight_info HTTP/1.1" 200 -
+16:52:16 — INFO — Données de vol récupérées
+16:52:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:16] "GET /flight_info HTTP/1.1" 200 -
+16:52:22 — INFO — Données de vol récupérées
+16:52:22 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:22] "GET /flight_info HTTP/1.1" 200 -
+16:52:26 — INFO — Données de vol récupérées
+16:52:26 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:26] "GET /flight_info HTTP/1.1" 200 -
+16:52:32 — INFO — Données de vol récupérées
+16:52:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:32] "GET /flight_info HTTP/1.1" 200 -
+16:52:38 — INFO — Données de vol récupérées
+16:52:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:38] "GET /flight_info HTTP/1.1" 200 -
+16:52:42 — INFO — Données de vol récupérées
+16:52:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:42] "GET /flight_info HTTP/1.1" 200 -
+16:52:47 — INFO — Données de vol récupérées
+16:52:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:47] "GET /flight_info HTTP/1.1" 200 -
+16:52:53 — INFO — Données de vol récupérées
+16:52:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:53] "GET /flight_info HTTP/1.1" 200 -
+16:52:56 — INFO — Données de vol récupérées
+16:52:56 — INFO — 127.0.0.1 - - [21/Jul/2025 16:52:56] "GET /flight_info HTTP/1.1" 200 -
+16:53:02 — INFO — Données de vol récupérées
+16:53:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:02] "GET /flight_info HTTP/1.1" 200 -
+16:53:08 — INFO — Données de vol récupérées
+16:53:08 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:08] "GET /flight_info HTTP/1.1" 200 -
+16:53:12 — INFO — Données de vol récupérées
+16:53:12 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:12] "GET /flight_info HTTP/1.1" 200 -
+16:53:17 — INFO — Données de vol récupérées
+16:53:17 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:17] "GET /flight_info HTTP/1.1" 200 -
+16:53:23 — INFO — Données de vol récupérées
+16:53:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:23] "GET /flight_info HTTP/1.1" 200 -
+16:53:27 — INFO — Données de vol récupérées
+16:53:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:27] "GET /flight_info HTTP/1.1" 200 -
+16:53:31 — INFO — Données de vol récupérées
+16:53:31 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:31] "GET /flight_info HTTP/1.1" 200 -
+16:53:38 — INFO — Données de vol récupérées
+16:53:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:38] "GET /flight_info HTTP/1.1" 200 -
+16:53:42 — INFO — Données de vol récupérées
+16:53:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:53:42] "GET /flight_info HTTP/1.1" 200 -
+16:53:52 — INFO — Connexion MAVLink en cours...
+16:54:26 — INFO — Heartbeat MAVLink reçu
+16:54:26 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:54:26 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+16:54:26 — INFO — [33mPress CTRL+C to quit[0m
+16:54:26 — INFO —  * Restarting with stat
+16:54:26 — INFO — Connexion MAVLink en cours...
+16:54:27 — INFO — Heartbeat MAVLink reçu
+16:54:27 — INFO — Démarrage de l'API Flask du drone (mode debug)
+16:54:27 — WARNING —  * Debugger is active!
+16:54:27 — INFO —  * Debugger PIN: 534-543-481
+16:54:33 — INFO — Données de vol récupérées
+16:54:33 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:33] "GET /flight_info HTTP/1.1" 200 -
+16:54:38 — INFO — Données de vol récupérées
+16:54:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:38] "GET /flight_info HTTP/1.1" 200 -
+16:54:42 — INFO — Données de vol récupérées
+16:54:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:42] "GET /flight_info HTTP/1.1" 200 -
+16:54:47 — INFO — Données de vol récupérées
+16:54:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:47] "GET /flight_info HTTP/1.1" 200 -
+16:54:53 — INFO — Données de vol récupérées
+16:54:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:53] "GET /flight_info HTTP/1.1" 200 -
+16:54:56 — INFO — Données de vol récupérées
+16:54:56 — INFO — 127.0.0.1 - - [21/Jul/2025 16:54:56] "GET /flight_info HTTP/1.1" 200 -
+16:55:01 — INFO — Données de vol récupérées
+16:55:01 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:01] "GET /flight_info HTTP/1.1" 200 -
+16:55:07 — INFO — Données de vol récupérées
+16:55:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:07] "GET /flight_info HTTP/1.1" 200 -
+16:55:11 — INFO — Données de vol récupérées
+16:55:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:11] "GET /flight_info HTTP/1.1" 200 -
+16:55:17 — INFO — Données de vol récupérées
+16:55:17 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:17] "GET /flight_info HTTP/1.1" 200 -
+16:55:23 — INFO — Données de vol récupérées
+16:55:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:23] "GET /flight_info HTTP/1.1" 200 -
+16:55:27 — INFO — Données de vol récupérées
+16:55:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:27] "GET /flight_info HTTP/1.1" 200 -
+16:55:32 — INFO — Données de vol récupérées
+16:55:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:32] "GET /flight_info HTTP/1.1" 200 -
+16:55:37 — INFO — Données de vol récupérées
+16:55:37 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:37] "GET /flight_info HTTP/1.1" 200 -
+16:55:41 — INFO — Données de vol récupérées
+16:55:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:41] "GET /flight_info HTTP/1.1" 200 -
+16:55:47 — INFO — Données de vol récupérées
+16:55:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:47] "GET /flight_info HTTP/1.1" 200 -
+16:55:53 — INFO — Données de vol récupérées
+16:55:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:53] "GET /flight_info HTTP/1.1" 200 -
+16:55:57 — INFO — Données de vol récupérées
+16:55:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:55:57] "GET /flight_info HTTP/1.1" 200 -
+16:56:02 — INFO — Données de vol récupérées
+16:56:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:02] "GET /flight_info HTTP/1.1" 200 -
+16:56:07 — INFO — Données de vol récupérées
+16:56:07 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:07] "GET /flight_info HTTP/1.1" 200 -
+16:56:11 — INFO — Données de vol récupérées
+16:56:11 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:11] "GET /flight_info HTTP/1.1" 200 -
+16:56:16 — INFO — Données de vol récupérées
+16:56:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:16] "GET /flight_info HTTP/1.1" 200 -
+16:56:23 — INFO — Données de vol récupérées
+16:56:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:23] "GET /flight_info HTTP/1.1" 200 -
+16:56:27 — INFO — Données de vol récupérées
+16:56:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:27] "GET /flight_info HTTP/1.1" 200 -
+16:56:32 — INFO — Données de vol récupérées
+16:56:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:32] "GET /flight_info HTTP/1.1" 200 -
+16:56:38 — INFO — Données de vol récupérées
+16:56:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:38] "GET /flight_info HTTP/1.1" 200 -
+16:56:41 — INFO — Données de vol récupérées
+16:56:41 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:41] "GET /flight_info HTTP/1.1" 200 -
+16:56:46 — INFO — Données de vol récupérées
+16:56:46 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:46] "GET /flight_info HTTP/1.1" 200 -
+16:56:52 — INFO — Données de vol récupérées
+16:56:52 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:52] "GET /flight_info HTTP/1.1" 200 -
+16:56:57 — INFO — Données de vol récupérées
+16:56:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:56:57] "GET /flight_info HTTP/1.1" 200 -
+16:57:02 — INFO — Données de vol récupérées
+16:57:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:02] "GET /flight_info HTTP/1.1" 200 -
+16:57:08 — INFO — Données de vol récupérées
+16:57:08 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:08] "GET /flight_info HTTP/1.1" 200 -
+16:57:12 — INFO — Données de vol récupérées
+16:57:12 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:12] "GET /flight_info HTTP/1.1" 200 -
+16:57:16 — INFO — Données de vol récupérées
+16:57:16 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:16] "GET /flight_info HTTP/1.1" 200 -
+16:57:22 — INFO — Données de vol récupérées
+16:57:22 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:22] "GET /flight_info HTTP/1.1" 200 -
+16:57:27 — INFO — Données de vol récupérées
+16:57:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:27] "GET /flight_info HTTP/1.1" 200 -
+16:57:32 — INFO — Données de vol récupérées
+16:57:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:32] "GET /flight_info HTTP/1.1" 200 -
+16:57:38 — INFO — Données de vol récupérées
+16:57:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:38] "GET /flight_info HTTP/1.1" 200 -
+16:57:42 — INFO — Données de vol récupérées
+16:57:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:42] "GET /flight_info HTTP/1.1" 200 -
+16:57:47 — INFO — Données de vol récupérées
+16:57:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:47] "GET /flight_info HTTP/1.1" 200 -
+16:57:53 — INFO — Données de vol récupérées
+16:57:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:53] "GET /flight_info HTTP/1.1" 200 -
+16:57:56 — INFO — Données de vol récupérées
+16:57:56 — INFO — 127.0.0.1 - - [21/Jul/2025 16:57:56] "GET /flight_info HTTP/1.1" 200 -
+16:58:02 — INFO — Données de vol récupérées
+16:58:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:02] "GET /flight_info HTTP/1.1" 200 -
+16:58:08 — INFO — Données de vol récupérées
+16:58:08 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:08] "GET /flight_info HTTP/1.1" 200 -
+16:58:12 — INFO — Données de vol récupérées
+16:58:12 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:12] "GET /flight_info HTTP/1.1" 200 -
+16:58:17 — INFO — Données de vol récupérées
+16:58:17 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:17] "GET /flight_info HTTP/1.1" 200 -
+16:58:23 — INFO — Données de vol récupérées
+16:58:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:23] "GET /flight_info HTTP/1.1" 200 -
+16:58:27 — INFO — Données de vol récupérées
+16:58:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:27] "GET /flight_info HTTP/1.1" 200 -
+16:58:33 — INFO — Données de vol récupérées
+16:58:33 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:33] "GET /flight_info HTTP/1.1" 200 -
+16:58:38 — INFO — Données de vol récupérées
+16:58:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:38] "GET /flight_info HTTP/1.1" 200 -
+16:58:42 — INFO — Données de vol récupérées
+16:58:42 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:42] "GET /flight_info HTTP/1.1" 200 -
+16:58:47 — INFO — Données de vol récupérées
+16:58:47 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:47] "GET /flight_info HTTP/1.1" 200 -
+16:58:53 — INFO — Données de vol récupérées
+16:58:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:53] "GET /flight_info HTTP/1.1" 200 -
+16:58:57 — INFO — Données de vol récupérées
+16:58:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:58:57] "GET /flight_info HTTP/1.1" 200 -
+16:59:02 — INFO — Données de vol récupérées
+16:59:02 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:02] "GET /flight_info HTTP/1.1" 200 -
+16:59:09 — INFO — Données de vol récupérées
+16:59:09 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:09] "GET /flight_info HTTP/1.1" 200 -
+16:59:13 — INFO — Données de vol récupérées
+16:59:13 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:13] "GET /flight_info HTTP/1.1" 200 -
+16:59:17 — INFO — Données de vol récupérées
+16:59:17 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:17] "GET /flight_info HTTP/1.1" 200 -
+16:59:23 — INFO — Données de vol récupérées
+16:59:23 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:23] "GET /flight_info HTTP/1.1" 200 -
+16:59:27 — INFO — Données de vol récupérées
+16:59:27 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:27] "GET /flight_info HTTP/1.1" 200 -
+16:59:32 — INFO — Données de vol récupérées
+16:59:32 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:32] "GET /flight_info HTTP/1.1" 200 -
+16:59:38 — INFO — Données de vol récupérées
+16:59:38 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:38] "GET /flight_info HTTP/1.1" 200 -
+16:59:43 — INFO — Données de vol récupérées
+16:59:43 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:43] "GET /flight_info HTTP/1.1" 200 -
+16:59:48 — INFO — Données de vol récupérées
+16:59:48 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:48] "GET /flight_info HTTP/1.1" 200 -
+16:59:53 — INFO — Données de vol récupérées
+16:59:53 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:53] "GET /flight_info HTTP/1.1" 200 -
+16:59:57 — INFO — Données de vol récupérées
+16:59:57 — INFO — 127.0.0.1 - - [21/Jul/2025 16:59:57] "GET /flight_info HTTP/1.1" 200 -
+17:00:02 — INFO — Données de vol récupérées
+17:00:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:02] "GET /flight_info HTTP/1.1" 200 -
+17:00:08 — INFO — Données de vol récupérées
+17:00:08 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:08] "GET /flight_info HTTP/1.1" 200 -
+17:00:13 — INFO — Données de vol récupérées
+17:00:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:13] "GET /flight_info HTTP/1.1" 200 -
+17:00:18 — INFO — Données de vol récupérées
+17:00:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:18] "GET /flight_info HTTP/1.1" 200 -
+17:00:23 — INFO — Données de vol récupérées
+17:00:23 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:23] "GET /flight_info HTTP/1.1" 200 -
+17:00:27 — INFO — Données de vol récupérées
+17:00:27 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:27] "GET /flight_info HTTP/1.1" 200 -
+17:00:32 — INFO — Données de vol récupérées
+17:00:32 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:32] "GET /flight_info HTTP/1.1" 200 -
+17:00:38 — INFO — Données de vol récupérées
+17:00:38 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:38] "GET /flight_info HTTP/1.1" 200 -
+17:00:42 — INFO — Données de vol récupérées
+17:00:42 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:42] "GET /flight_info HTTP/1.1" 200 -
+17:00:48 — INFO — Données de vol récupérées
+17:00:48 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:48] "GET /flight_info HTTP/1.1" 200 -
+17:00:54 — INFO — Données de vol récupérées
+17:00:54 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:54] "GET /flight_info HTTP/1.1" 200 -
+17:00:57 — INFO — Données de vol récupérées
+17:00:57 — INFO — 127.0.0.1 - - [21/Jul/2025 17:00:57] "GET /flight_info HTTP/1.1" 200 -
+17:01:02 — INFO — Données de vol récupérées
+17:01:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:02] "GET /flight_info HTTP/1.1" 200 -
+17:01:08 — INFO — Données de vol récupérées
+17:01:08 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:08] "GET /flight_info HTTP/1.1" 200 -
+17:01:12 — INFO — Données de vol récupérées
+17:01:12 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:12] "GET /flight_info HTTP/1.1" 200 -
+17:01:17 — INFO — Données de vol récupérées
+17:01:17 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:17] "GET /flight_info HTTP/1.1" 200 -
+17:01:24 — INFO — Données de vol récupérées
+17:01:24 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:24] "GET /flight_info HTTP/1.1" 200 -
+17:01:28 — INFO — Données de vol récupérées
+17:01:28 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:28] "GET /flight_info HTTP/1.1" 200 -
+17:01:32 — INFO — Données de vol récupérées
+17:01:32 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:32] "GET /flight_info HTTP/1.1" 200 -
+17:01:38 — INFO — Données de vol récupérées
+17:01:38 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:38] "GET /flight_info HTTP/1.1" 200 -
+17:01:42 — INFO — Données de vol récupérées
+17:01:42 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:42] "GET /flight_info HTTP/1.1" 200 -
+17:01:47 — INFO — Données de vol récupérées
+17:01:47 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:47] "GET /flight_info HTTP/1.1" 200 -
+17:01:54 — INFO — Données de vol récupérées
+17:01:54 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:54] "GET /flight_info HTTP/1.1" 200 -
+17:01:58 — INFO — Données de vol récupérées
+17:01:58 — INFO — 127.0.0.1 - - [21/Jul/2025 17:01:58] "GET /flight_info HTTP/1.1" 200 -
+17:02:03 — INFO — Données de vol récupérées
+17:02:03 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:03] "GET /flight_info HTTP/1.1" 200 -
+17:02:08 — INFO — Données de vol récupérées
+17:02:08 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:08] "GET /flight_info HTTP/1.1" 200 -
+17:02:12 — INFO — Données de vol récupérées
+17:02:12 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:12] "GET /flight_info HTTP/1.1" 200 -
+17:02:17 — INFO — Données de vol récupérées
+17:02:17 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:17] "GET /flight_info HTTP/1.1" 200 -
+17:02:23 — INFO — Données de vol récupérées
+17:02:23 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:23] "GET /flight_info HTTP/1.1" 200 -
+17:02:28 — INFO — Données de vol récupérées
+17:02:28 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:28] "GET /flight_info HTTP/1.1" 200 -
+17:02:47 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:02:47 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:47] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:02:52 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:02:52 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:52] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:02:56 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:02:56 — INFO — 127.0.0.1 - - [21/Jul/2025 17:02:56] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:02 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:02] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:07 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:07 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:07] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:12 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:12 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:12] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:17 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:17 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:17] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:22 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:22 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:22] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:27 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:27 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:27] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:31 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:31 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:31] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:37 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:37 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:37] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:42 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:42 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:42] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:47 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:47 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:47] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:52 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:52 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:52] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:03:57 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:03:57 — INFO — 127.0.0.1 - - [21/Jul/2025 17:03:57] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:02 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:02] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:07 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:07 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:07] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:12 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:12 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:12] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:17 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:17 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:17] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:22 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:22 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:22] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:27 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:27 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:27] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:32 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:32 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:32] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:37 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:37 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:37] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:42 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:42 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:42] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:47 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:47 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:47] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:48 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:48 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:48] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:52 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:52 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:52] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:53 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:53 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:53] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:04:57 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:04:57 — INFO — 127.0.0.1 - - [21/Jul/2025 17:04:57] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:00 — INFO — Données de vol récupérées
+17:05:00 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:00] "GET /flight_info HTTP/1.1" 200 -
+17:05:02 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:02] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:03 — INFO — Données de vol récupérées
+17:05:03 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:03] "GET /flight_info HTTP/1.1" 200 -
+17:05:07 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:07 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:07] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:08 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:08 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:08] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:10 — INFO — Données de vol récupérées
+17:05:10 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:10] "GET /flight_info HTTP/1.1" 200 -
+17:05:11 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:11 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:11] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:13 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:13] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:14 — INFO — Données de vol récupérées
+17:05:14 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:14] "GET /flight_info HTTP/1.1" 200 -
+17:05:16 — INFO — Données de vol récupérées
+17:05:16 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:16] "GET /flight_info HTTP/1.1" 200 -
+17:05:18 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:18] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:19 — INFO — Données de vol récupérées
+17:05:19 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:19] "GET /flight_info HTTP/1.1" 200 -
+17:05:25 — INFO — Données de vol récupérées
+17:05:25 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:25] "GET /flight_info HTTP/1.1" 200 -
+17:05:27 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:05:27 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:27] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:05:29 — INFO — Données de vol récupérées
+17:05:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:29] "GET /flight_info HTTP/1.1" 200 -
+17:05:33 — INFO — Données de vol récupérées
+17:05:33 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:33] "GET /flight_info HTTP/1.1" 200 -
+17:05:39 — INFO — Données de vol récupérées
+17:05:39 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:39] "GET /flight_info HTTP/1.1" 200 -
+17:05:43 — INFO — Données de vol récupérées
+17:05:43 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:43] "GET /flight_info HTTP/1.1" 200 -
+17:05:49 — INFO — Données de vol récupérées
+17:05:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:49] "GET /flight_info HTTP/1.1" 200 -
+17:05:55 — INFO — Données de vol récupérées
+17:05:55 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:55] "GET /flight_info HTTP/1.1" 200 -
+17:05:59 — INFO — Données de vol récupérées
+17:05:59 — INFO — 127.0.0.1 - - [21/Jul/2025 17:05:59] "GET /flight_info HTTP/1.1" 200 -
+17:06:04 — INFO — Données de vol récupérées
+17:06:04 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:04] "GET /flight_info HTTP/1.1" 200 -
+17:06:09 — INFO — Données de vol récupérées
+17:06:09 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:09] "GET /flight_info HTTP/1.1" 200 -
+17:06:13 — INFO — Données de vol récupérées
+17:06:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:13] "GET /flight_info HTTP/1.1" 200 -
+17:06:18 — INFO — Données de vol récupérées
+17:06:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:18] "GET /flight_info HTTP/1.1" 200 -
+17:06:25 — INFO — Données de vol récupérées
+17:06:25 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:25] "GET /flight_info HTTP/1.1" 200 -
+17:06:29 — INFO — Données de vol récupérées
+17:06:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:29] "GET /flight_info HTTP/1.1" 200 -
+17:06:34 — INFO — Données de vol récupérées
+17:06:34 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:34] "GET /flight_info HTTP/1.1" 200 -
+17:06:39 — INFO — Données de vol récupérées
+17:06:39 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:39] "GET /flight_info HTTP/1.1" 200 -
+17:06:43 — INFO — Données de vol récupérées
+17:06:43 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:43] "GET /flight_info HTTP/1.1" 200 -
+17:06:49 — INFO — Données de vol récupérées
+17:06:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:49] "GET /flight_info HTTP/1.1" 200 -
+17:06:54 — INFO — Données de vol récupérées
+17:06:54 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:54] "GET /flight_info HTTP/1.1" 200 -
+17:06:58 — INFO — Données de vol récupérées
+17:06:58 — INFO — 127.0.0.1 - - [21/Jul/2025 17:06:58] "GET /flight_info HTTP/1.1" 200 -
+17:07:03 — INFO — Données de vol récupérées
+17:07:03 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:03] "GET /flight_info HTTP/1.1" 200 -
+17:07:10 — INFO — Données de vol récupérées
+17:07:10 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:10] "GET /flight_info HTTP/1.1" 200 -
+17:07:14 — INFO — Données de vol récupérées
+17:07:14 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:14] "GET /flight_info HTTP/1.1" 200 -
+17:07:19 — INFO — Données de vol récupérées
+17:07:19 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:19] "GET /flight_info HTTP/1.1" 200 -
+17:07:25 — INFO — Données de vol récupérées
+17:07:25 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:25] "GET /flight_info HTTP/1.1" 200 -
+17:07:29 — INFO — Données de vol récupérées
+17:07:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:29] "GET /flight_info HTTP/1.1" 200 -
+17:07:33 — INFO — Données de vol récupérées
+17:07:33 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:33] "GET /flight_info HTTP/1.1" 200 -
+17:07:39 — INFO — Données de vol récupérées
+17:07:39 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:39] "GET /flight_info HTTP/1.1" 200 -
+17:07:44 — INFO — Données de vol récupérées
+17:07:44 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:44] "GET /flight_info HTTP/1.1" 200 -
+17:07:49 — INFO — Données de vol récupérées
+17:07:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:49] "GET /flight_info HTTP/1.1" 200 -
+17:07:55 — INFO — Données de vol récupérées
+17:07:55 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:55] "GET /flight_info HTTP/1.1" 200 -
+17:07:59 — INFO — Données de vol récupérées
+17:07:59 — INFO — 127.0.0.1 - - [21/Jul/2025 17:07:59] "GET /flight_info HTTP/1.1" 200 -
+17:08:04 — INFO — Données de vol récupérées
+17:08:04 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:04] "GET /flight_info HTTP/1.1" 200 -
+17:08:09 — INFO — Données de vol récupérées
+17:08:09 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:09] "GET /flight_info HTTP/1.1" 200 -
+17:08:13 — INFO — Données de vol récupérées
+17:08:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:13] "GET /flight_info HTTP/1.1" 200 -
+17:08:19 — INFO — Données de vol récupérées
+17:08:19 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:19] "GET /flight_info HTTP/1.1" 200 -
+17:08:25 — INFO — Données de vol récupérées
+17:08:25 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:25] "GET /flight_info HTTP/1.1" 200 -
+17:08:29 — INFO — Données de vol récupérées
+17:08:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:29] "GET /flight_info HTTP/1.1" 200 -
+17:08:34 — INFO — Données de vol récupérées
+17:08:34 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:34] "GET /flight_info HTTP/1.1" 200 -
+17:08:39 — INFO — Données de vol récupérées
+17:08:39 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:39] "GET /flight_info HTTP/1.1" 200 -
+17:08:44 — INFO — Données de vol récupérées
+17:08:44 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:44] "GET /flight_info HTTP/1.1" 200 -
+17:08:49 — INFO — Données de vol récupérées
+17:08:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:49] "GET /flight_info HTTP/1.1" 200 -
+17:08:55 — INFO — Données de vol récupérées
+17:08:55 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:55] "GET /flight_info HTTP/1.1" 200 -
+17:08:59 — INFO — Données de vol récupérées
+17:08:59 — INFO — 127.0.0.1 - - [21/Jul/2025 17:08:59] "GET /flight_info HTTP/1.1" 200 -
+17:09:04 — INFO — Données de vol récupérées
+17:09:04 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:04] "GET /flight_info HTTP/1.1" 200 -
+17:09:10 — INFO — Données de vol récupérées
+17:09:10 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:10] "GET /flight_info HTTP/1.1" 200 -
+17:09:13 — INFO — Données de vol récupérées
+17:09:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:13] "GET /flight_info HTTP/1.1" 200 -
+17:09:19 — INFO — Données de vol récupérées
+17:09:19 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:19] "GET /flight_info HTTP/1.1" 200 -
+17:09:25 — INFO — Données de vol récupérées
+17:09:25 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:25] "GET /flight_info HTTP/1.1" 200 -
+17:09:29 — INFO — Données de vol récupérées
+17:09:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:29] "GET /flight_info HTTP/1.1" 200 -
+17:09:34 — INFO — Données de vol récupérées
+17:09:34 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:34] "GET /flight_info HTTP/1.1" 200 -
+17:09:40 — INFO — Données de vol récupérées
+17:09:40 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:40] "GET /flight_info HTTP/1.1" 200 -
+17:09:44 — INFO — Données de vol récupérées
+17:09:44 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:44] "GET /flight_info HTTP/1.1" 200 -
+17:09:48 — INFO — Données de vol récupérées
+17:09:48 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:48] "GET /flight_info HTTP/1.1" 200 -
+17:09:55 — INFO — Données de vol récupérées
+17:09:55 — INFO — 127.0.0.1 - - [21/Jul/2025 17:09:55] "GET /flight_info HTTP/1.1" 200 -
+17:10:00 — INFO — Données de vol récupérées
+17:10:00 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:00] "GET /flight_info HTTP/1.1" 200 -
+17:10:04 — INFO — Données de vol récupérées
+17:10:04 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:04] "GET /flight_info HTTP/1.1" 200 -
+17:10:10 — INFO — Données de vol récupérées
+17:10:10 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:10] "GET /flight_info HTTP/1.1" 200 -
+17:10:14 — INFO — Données de vol récupérées
+17:10:14 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:14] "GET /flight_info HTTP/1.1" 200 -
+17:10:18 — INFO — Données de vol récupérées
+17:10:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:18] "GET /flight_info HTTP/1.1" 200 -
+17:10:24 — INFO — Données de vol récupérées
+17:10:24 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:24] "GET /flight_info HTTP/1.1" 200 -
+17:10:29 — INFO — Données de vol récupérées
+17:10:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:29] "GET /flight_info HTTP/1.1" 200 -
+17:10:31 — INFO — Script start_mission.py lancé
+17:10:31 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:31] "POST /start HTTP/1.1" 200 -
+17:10:35 — INFO — Données de vol récupérées
+17:10:35 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:35] "GET /flight_info HTTP/1.1" 200 -
+17:10:37 — INFO — Données de vol récupérées
+17:10:37 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:37] "GET /flight_info HTTP/1.1" 200 -
+17:10:40 — INFO — Données de vol récupérées
+17:10:40 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:40] "GET /flight_info HTTP/1.1" 200 -
+17:10:47 — INFO — Mission envoyée depuis fichier : mission_auto.waypoints
+17:10:47 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:47] "POST /mission/send HTTP/1.1" 200 -
+17:10:49 — INFO — Données de vol récupérées
+17:10:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:49] "GET /flight_info HTTP/1.1" 200 -
+17:10:49 — INFO — Script start_mission.py lancé
+17:10:49 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:49] "POST /start HTTP/1.1" 200 -
+17:10:53 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:10:53 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:53] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:10:55 — INFO — Données de vol récupérées
+17:10:55 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:55] "GET /flight_info HTTP/1.1" 200 -
+17:10:58 — INFO — Données de vol récupérées
+17:10:58 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:58] "GET /flight_info HTTP/1.1" 200 -
+17:10:58 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:10:58 — INFO — 127.0.0.1 - - [21/Jul/2025 17:10:58] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:11:04 — INFO — Données de vol récupérées
+17:11:04 — INFO — 127.0.0.1 - - [21/Jul/2025 17:11:04] "GET /flight_info HTTP/1.1" 200 -
+17:11:10 — INFO — Données de vol récupérées
+17:11:10 — INFO — 127.0.0.1 - - [21/Jul/2025 17:11:10] "GET /flight_info HTTP/1.1" 200 -
+17:11:53 — INFO — Connexion MAVLink en cours...
+17:11:53 — INFO — Heartbeat MAVLink reçu
+17:11:53 — INFO — Démarrage de l'API Flask du drone (mode debug)
+17:11:53 — INFO — [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+17:11:53 — INFO — [33mPress CTRL+C to quit[0m
+17:11:53 — INFO —  * Restarting with stat
+17:11:53 — INFO — Connexion MAVLink en cours...
+17:11:54 — INFO — Heartbeat MAVLink reçu
+17:11:54 — INFO — Démarrage de l'API Flask du drone (mode debug)
+17:11:54 — WARNING —  * Debugger is active!
+17:11:54 — INFO —  * Debugger PIN: 534-543-481
+17:12:00 — INFO — Données de vol récupérées
+17:12:00 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:00] "GET /flight_info HTTP/1.1" 200 -
+17:12:02 — INFO — Données de vol récupérées
+17:12:02 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:02] "GET /flight_info HTTP/1.1" 200 -
+17:12:05 — INFO — Données de vol récupérées
+17:12:05 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:05] "GET /flight_info HTTP/1.1" 200 -
+17:12:08 — INFO — Données de vol récupérées
+17:12:08 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:08] "GET /flight_info HTTP/1.1" 200 -
+17:12:13 — INFO — Données de vol récupérées
+17:12:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:13] "GET /flight_info HTTP/1.1" 200 -
+17:12:13 — INFO — Mission envoyée depuis fichier : mission_auto.waypoints
+17:12:13 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:13] "POST /mission/send HTTP/1.1" 200 -
+17:12:16 — INFO — Script start_mission.py lancé
+17:12:16 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:16] "POST /start HTTP/1.1" 200 -
+17:12:18 — INFO — Données de vol récupérées
+17:12:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:18] "GET /flight_info HTTP/1.1" 200 -
+17:12:21 — INFO — Données de vol récupérées
+17:12:21 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:21] "GET /flight_info HTTP/1.1" 200 -
+17:12:24 — INFO — Données de vol récupérées
+17:12:24 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:24] "GET /flight_info HTTP/1.1" 200 -
+17:12:27 — INFO — Données de vol récupérées
+17:12:27 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:27] "GET /flight_info HTTP/1.1" 200 -
+17:12:29 — INFO — Données de vol récupérées
+17:12:29 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:29] "GET /flight_info HTTP/1.1" 200 -
+17:12:33 — INFO — Script start_mission.py lancé
+17:12:33 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:33] "POST /start HTTP/1.1" 200 -
+17:12:39 — INFO — Données de vol récupérées
+17:12:39 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:39] "GET /flight_info HTTP/1.1" 200 -
+17:12:42 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:12:42 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:42] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:12:44 — INFO — Données de vol récupérées
+17:12:44 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:44] "GET /flight_info HTTP/1.1" 200 -
+17:12:46 — INFO — Données de vol récupérées
+17:12:46 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:46] "GET /flight_info HTTP/1.1" 200 -
+17:12:48 — ERROR — Erreur récupération infos vol: Aucune donnée de position ou heartbeat reçue.
+17:12:48 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:48] "[35m[1mGET /flight_info HTTP/1.1[0m" 500 -
+17:12:48 — INFO — Données de vol récupérées
+17:12:48 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:48] "GET /flight_info HTTP/1.1" 200 -
+17:12:54 — INFO — Données de vol récupérées
+17:12:54 — INFO — 127.0.0.1 - - [21/Jul/2025 17:12:54] "GET /flight_info HTTP/1.1" 200 -
+17:13:09 — INFO — Mission envoyée depuis fichier : mission_auto.waypoints
+17:13:09 — INFO — 127.0.0.1 - - [21/Jul/2025 17:13:09] "POST /mission/send HTTP/1.1" 200 -
+17:13:12 — INFO — Script start_mission.py lancé
+17:13:12 — INFO — 127.0.0.1 - - [21/Jul/2025 17:13:12] "POST /start HTTP/1.1" 200 -
+17:13:18 — INFO — Données de vol récupérées
+17:13:18 — INFO — 127.0.0.1 - - [21/Jul/2025 17:13:18] "GET /flight_info HTTP/1.1" 200 -
