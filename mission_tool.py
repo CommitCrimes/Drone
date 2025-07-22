@@ -2,6 +2,8 @@ import json
 import sys
 from pymavlink import mavutil
 from get_flight_info import flight_info
+import time
+
 
 import json
 #Rajouter une premiere ligne pour le take off qui correspond a l'emplacement actuel du drone Faire une request Flight info pour récupérer la position
@@ -89,7 +91,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", mast
             mission_waypoints[-1]["command"] = 21
             mission_waypoints[-1]["alt"] = 0
 
-    with open(filename, "w") as f:
+    with open("missions/"+filename, "w") as f:
         f.write("QGC WPL 110\n")
         for wp in mission_waypoints:
             line = (
@@ -98,7 +100,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", mast
                 f"{wp['lat']:.8f}\t{wp['lon']:.8f}\t{wp['alt']:.6f}\t{wp['autoContinue']}\n"
             )
             f.write(line)
-    print(f"Mission .waypoints créée : {filename}")
+    print(f"Mission .waypoints créée : missions/{filename}")
 
 # ─────────────────────────────────────────────
 # Fonction : send_mission
@@ -109,9 +111,7 @@ def create_mission(filename, altitude_takeoff, waypoints=None, mode="auto", mast
 #   - Définit le point courant à 0
 # ─────────────────────────────────────────────
 
-def send_mission(filename, master):
-    import time
-
+def send_mission(filename):
     print(f"Chargement du fichier .waypoints : {filename}")
 
     # Lire et parser les waypoints depuis fichier texte
