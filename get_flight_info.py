@@ -24,7 +24,7 @@ def flight_info(drone_id, master):
             "flight_mode": mavutil.mode_string_v10(heartbeat),
             "latitude": msg.lat / 1e7,
             "longitude": msg.lon / 1e7,
-            "altitude_m": msg.relative_alt / 1000.0,
+            "altitude_m": msg.relative_alt / 1000.0,    
             "horizontal_speed_m_s": round(math.sqrt(vx**2 + vy**2), 2),
             "vertical_speed_m_s": round(vz, 2),
             "heading_deg": msg.hdg / 100.0

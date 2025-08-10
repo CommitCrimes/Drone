@@ -73,46 +73,43 @@ def api_create_mission():
 @app.route('/mission/send', methods=['POST'])
 def api_send_mission():
     try:
-        if 'file' not in request.files:
-            logger.warning("Aucun fichier reçu pour /mission/send")
-            return jsonify(error="Aucun fichier reçu"), 400
+        if 'file' in request.files:
+            file = request.files['file']
+            if not file.filename.endswith('.waypoints'):
+                logger.warning("Fichier non .waypoints rejeté")
+                return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
 
-        file = request.files['file']
-        if not file.filename.endswith('.waypoints'):
-            logger.warning("Fichier non .waypoints rejeté")
+            filepath = os.path.join('/tmp', file.filename)
+            file.save(filepath)
+
+            send_mission(filepath, master)
+            logger.info(f"Mission envoyée depuis fichier uploadé : {file.filename}")
+            return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
+
+        data = request.get_json(silent=True) or {}
+        filename = data.get('filename')
+        if not filename:
+            logger.warning("Ni fichier uploadé ni 'filename' fourni")
+            return jsonify(error="Aucun fichier reçu et aucun 'filename' fourni"), 400
+
+        if not filename.endswith('.waypoints'):
             return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
 
-        filepath = os.path.join('/tmp', file.filename)
-        file.save(filepath)
+        filepath = filename
+        if not os.path.isabs(filepath):
+            if not filepath.startswith('missions' + os.sep) and not filepath.startswith('missions/'):
+                filepath = os.path.join('missions', filepath)
+
+        if not os.path.exists(filepath):
+            logger.warning(f"Fichier introuvable: {filepath}")
+            return jsonify(error=f"Fichier introuvable: {filepath}"), 404
 
         send_mission(filepath, master)
-        logger.info(f"Mission envoyée depuis fichier : {file.filename}")
-        return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
+        logger.info(f"Mission envoyée depuis fichier existant : {filepath}")
+        return jsonify(message=f"Mission envoyée depuis {filepath}"), 200
 
     except Exception as e:
         logger.error(f"Erreur envoi mission: {str(e)}")
-        return jsonify(error=str(e)), 500
-
-# ─────────────────────────────────────────────
-# POST /mission/modify
-@app.route('/mission/modify', methods=['POST'])
-def api_modify_mission():
-    try:
-        data = request.get_json()
-        filename = data.get("filename")
-        seq = data.get("seq")
-        updates = data.get("updates", {})
-
-        if not filename or seq is None or not isinstance(updates, dict):
-            logger.warning("Requête invalide pour /mission/modify")
-            return jsonify(error="Champs 'filename', 'seq' et 'updates' requis"), 400
-
-        modify_mission(filename, int(seq), updates)
-        logger.info(f"Waypoint {seq} modifié dans {filename} : {updates}")
-        return jsonify(message=f"Waypoint {seq} modifié dans {filename}"), 200
-
-    except Exception as e:
-        logger.error(f"Erreur modification mission: {str(e)}")
         return jsonify(error=str(e)), 500
 
 # ─────────────────────────────────────────────

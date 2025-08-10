@@ -10,3 +10,6 @@ __pycache__/
 # Ignorer tout le dossier logs, y compris les sous-dossiers
 logs/
 *.log
+
+missions/
+.waypoints/
