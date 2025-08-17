@@ -1,8 +1,11 @@
+from doctest import master
 import json
+import os
 import sys
 from pymavlink import mavutil
 from get_flight_info import flight_info
 import time
+from typing import List, Dict, Any
 
 
 import json
@@ -26,50 +29,57 @@ drone_id = config["drone_id"]
 # Sortie :
 #   - Écrit le fichier .waypoints prêt à être envoyé
 # ─────────────────────────────────────────────
-def create_mission(master, filename, altitude_takeoff, waypoints=None, mode="auto"):
+def create_mission(
+    master,
+    filename,
+    altitude_takeoff,
+    waypoints=None,
+    mode="auto",
+    startlat=None,
+    startlon=None,
+        startalt=None,
+):
     mission_waypoints = []
-    
+
     if mode == "man":
         if not waypoints:
             raise ValueError("En mode 'man', il faut passer la liste complète de waypoints.")
         mission_waypoints = waypoints
-
     else:
-        get_flight_info = flight_info(drone_id, master)
-        latitude = get_flight_info["latitude"]
-        longitude = get_flight_info["longitude"]
-        altitude = get_flight_info.get("altitude", altitude_takeoff)
+        if startlat is not None and startlon is not None:
+            latitude  = float(startlat)
+            longitude = float(startlon)
+            altitude0 = float(startalt) if startalt is not None else float(altitude_takeoff)
+        else:
+            info = flight_info(drone_id, master)
+            latitude  = float(info["latitude"])
+            longitude = float(info["longitude"])
+            # compat: selon ta fonction flight_info, la clé peut être altitude_m
+            altitude0 = float(info.get("altitude_m", info.get("altitude", altitude_takeoff)))
 
+        # WP 0 : point de départ (WAYPOINT)
         mission_waypoints.append({
             "seq": 0,
             "current": 1,
             "frame": 0,
             "command": 16,
-            "param1": 0,
-            "param2": 0,
-            "param3": 0,
-            "param4": 0,
-            "lat": latitude,
-            "lon": longitude,
-            "alt": altitude,
+            "param1": 0, "param2": 0, "param3": 0, "param4": 0,
+            "lat": latitude, "lon": longitude, "alt": altitude0,
             "autoContinue": 1
         })
 
+        # WP 1 : TAKEOFF vers altitude_takeoff
         mission_waypoints.append({
             "seq": 1,
             "current": 0,
             "frame": 0,
             "command": 22,
-            "param1": 0,
-            "param2": 0,
-            "param3": 0,
-            "param4": 0,
-            "lat": latitude,
-            "lon": longitude,
-            "alt": altitude_takeoff,
+            "param1": 0, "param2": 0, "param3": 0, "param4": 0,
+            "lat": latitude, "lon": longitude, "alt": float(altitude_takeoff),
             "autoContinue": 1
         })
 
+        # WPs utilisateur (dès seq=2)
         if waypoints:
             for i, wp in enumerate(waypoints, start=2):
                 mission_waypoints.append({
@@ -87,20 +97,28 @@ def create_mission(master, filename, altitude_takeoff, waypoints=None, mode="aut
                     "autoContinue": wp.get("autoContinue", 1)
                 })
 
+        # Dernier WP → LAND
         if mission_waypoints:
             mission_waypoints[-1]["command"] = 21
             mission_waypoints[-1]["alt"] = 0
 
-    with open("missions/"+filename, "w") as f:
+    # Écriture du fichier (assure-toi que le dossier existe)
+    outdir = "missions"
+    os.makedirs(outdir, exist_ok=True)
+    outpath = filename if os.path.isabs(filename) else os.path.join(outdir, filename)
+
+    with open(outpath, "w") as f:
         f.write("QGC WPL 110\n")
         for wp in mission_waypoints:
             line = (
                 f"{wp['seq']}\t{wp['current']}\t{wp['frame']}\t{wp['command']}\t"
-                f"{wp['param1']:.8f}\t{wp['param2']:.8f}\t{wp['param3']:.8f}\t{wp['param4']:.8f}\t"
-                f"{wp['lat']:.8f}\t{wp['lon']:.8f}\t{wp['alt']:.6f}\t{wp['autoContinue']}\n"
+                f"{float(wp['param1']):.8f}\t{float(wp['param2']):.8f}\t{float(wp['param3']):.8f}\t{float(wp['param4']):.8f}\t"
+                f"{float(wp['lat']):.8f}\t{float(wp['lon']):.8f}\t{float(wp['alt']):.6f}\t{wp['autoContinue']}\n"
             )
             f.write(line)
-    print(f"Mission .waypoints créée : missions/{filename}")
+
+    print(f"Mission .waypoints créée : {outpath}")
+    return outpath
 
 # ─────────────────────────────────────────────
 # Fonction : send_mission
@@ -246,6 +264,60 @@ def modify_mission(filename, seq_to_modify, updated_fields):
 
     print(f"Fichier mis à jour : {filename}")
 
+def download_mission(master, timeout: float = 5.0) -> List[Dict[str, Any]]:
+    """
+    Récupère la mission actuellement chargée dans l'autopilote.
+    Retourne une liste de dicts compatibles avec ton format .waypoints.
+    Gère MISSION_ITEM_INT et MISSION_ITEM.
+    """
+    # Demander le nombre d'items
+    master.mav.mission_request_list_send(master.target_system, master.target_component)
+    count_msg = master.recv_match(type='MISSION_COUNT', blocking=True, timeout=timeout)
+    if not count_msg:
+        raise RuntimeError("MISSION_COUNT non reçu (timeout).")
+    count = int(count_msg.count)
+
+    items: List[Dict[str, Any]] = []
+
+    for i in range(count):
+        # On tente d'abord la version INT, puis fallback
+        master.mav.mission_request_int_send(master.target_system, master.target_component, i)
+        msg = master.recv_match(type=['MISSION_ITEM_INT', 'MISSION_ITEM'], blocking=True, timeout=timeout)
+
+        if msg is None:
+            master.mav.mission_request_send(master.target_system, master.target_component, i)
+            msg = master.recv_match(type=['MISSION_ITEM', 'MISSION_ITEM_INT'], blocking=True, timeout=timeout)
+
+        if msg is None:
+            raise RuntimeError(f"Item {i}: pas de réponse MISSION_ITEM(_INT).")
+
+        mtype = msg.get_type()
+        if mtype == 'MISSION_ITEM_INT':
+            lat = float(msg.x) / 1e7
+            lon = float(msg.y) / 1e7
+            alt = float(msg.z)
+        else:  # 'MISSION_ITEM'
+            lat = float(msg.x)
+            lon = float(msg.y)
+            alt = float(msg.z)
+
+        items.append({
+            "seq": int(getattr(msg, "seq", i)),
+            "current": int(getattr(msg, "current", 0)),
+            "frame": int(getattr(msg, "frame", 0)),
+            "command": int(getattr(msg, "command", 16)),
+            "param1": float(getattr(msg, "param1", 0.0)),
+            "param2": float(getattr(msg, "param2", 0.0)),
+            "param3": float(getattr(msg, "param3", 0.0)),
+            "param4": float(getattr(msg, "param4", 0.0)),
+            "lat": lat,
+            "lon": lon,
+            "alt": alt,
+            "autoContinue": int(getattr(msg, "autocontinue", 1)),
+        })
+
+    return items
+
 
 # --- Point d'entrée ---
 if __name__ == "__main__":
@@ -285,7 +357,33 @@ if __name__ == "__main__":
                     updated_fields[key] = val
 
         modify_mission(fichier, seq, updated_fields)
+    elif action == "download":
+        # Nécessite que tu aies ajouté download_mission() plus haut
+        from mission_tool import download_mission  # si la fonction est dans ce même fichier tu peux enlever cet import
+
+        outfile = sys.argv[2]
+        items = download_mission(master)
+
+        if outfile.endswith(".waypoints"):
+            os.makedirs(os.path.dirname(outfile) or "missions", exist_ok=True)
+            outpath = outfile
+            if not os.path.isabs(outpath):
+                if not outpath.startswith("missions" + os.sep) and not outpath.startswith("missions/"):
+                    outpath = os.path.join("missions", outpath)
+            with open(outpath, "w") as f:
+                f.write("QGC WPL 110\n")
+                for i, wp in enumerate(items):
+                    line = (
+                        f"{wp.get('seq', i)}\t{wp.get('current', 0)}\t{wp.get('frame', 0)}\t{wp.get('command', 16)}\t"
+                        f"{float(wp.get('param1', 0.0)):.8f}\t{float(wp.get('param2', 0.0)):.8f}\t"
+                        f"{float(wp.get('param3', 0.0)):.8f}\t{float(wp.get('param4', 0.0)):.8f}\t"
+                        f"{float(wp.get('lat', 0.0)):.8f}\t{float(wp.get('lon', 0.0)):.8f}\t"
+                        f"{float(wp.get('alt', 0.0)):.6f}\t{int(wp.get('autoContinue', 1))}\n"
+                    )
+                    f.write(line)
+            print(f"Mission téléchargée → {outpath}")
 
 
     else:
         print("Commande inconnue. Utilisez 'create' ou 'send' ou 'modify'.")
+

@@ -9,6 +9,7 @@ from get_flight_info import build_flight_info, flight_info as flight_info_direct
 from init_log import logger
 from mission_tool import create_mission, send_mission, modify_mission
 from start_mission import start
+from mission_tool import create_mission, send_mission, modify_mission, download_mission
 
 # ─────────────────────────────────────────────
 # Config
@@ -63,13 +64,34 @@ def api_create_mission():
         waypoints = data.get("waypoints", [])
         mode = data.get("mode", "auto")
 
-        create_mission(master, filename, altitude_takeoff, waypoints, mode)
-        logger.info(f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}")
-        return jsonify(message=f"Mission créée dans {filename}"), 200
+        startlat = data.get("startlat")
+        startlon = data.get("startlon")
+        startalt = data.get("startalt")
+
+        if (startlat is None) ^ (startlon is None):
+            logger.warning("startlat/startlon incomplets — fallback sur flight_info")
+            startlat = None
+            startlon = None
+
+        create_mission(
+            master,
+            filename,
+            altitude_takeoff,
+            waypoints,
+            mode,
+            startlat=startlat,
+            startlon=startlon,
+            startalt=startalt,
+        )
+
+        logger.info(
+            f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}, "
+            f"start=({startlat},{startlon},{startalt})"
+        )
+        return jsonify(message=f"Mission créée dans {filename}", filename=filename), 201
     except Exception as e:
         logger.exception("Erreur création mission")
         return jsonify(error=str(e)), 500
-
 
 # ─────────────────────────────────────────────
 # POST /mission/send
@@ -177,6 +199,16 @@ def send_command():
 
     except Exception as e:
         logger.exception("Erreur changement de mode")
+        return jsonify(error=str(e)), 500
+# nouvelle route
+@app.route("/mission/current", methods=["GET"])
+def api_mission_current():
+    try:
+        items = download_mission(master)
+        # tu peux renvoyer tel quel ; c'est déjà "waypoints-like"
+        return jsonify({"count": len(items), "items": items}), 200
+    except Exception as e:
+        logger.exception("Erreur récupération mission courante")
         return jsonify(error=str(e)), 500
 
 
