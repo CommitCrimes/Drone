@@ -6,6 +6,8 @@ from pymavlink import mavutil
 from get_flight_info import flight_info
 import time
 from typing import List, Dict, Any
+import threading
+MISSION_IO_LOCK = threading.RLock()
 
 
 import json
@@ -51,7 +53,8 @@ def create_mission(
             longitude = float(startlon)
             altitude0 = float(startalt) if startalt is not None else float(altitude_takeoff)
         else:
-            info = flight_info(drone_id, master)
+            with MISSION_IO_LOCK:
+                info = flight_info(drone_id, master)
             latitude  = float(info["latitude"])
             longitude = float(info["longitude"])
             # compat: selon ta fonction flight_info, la clé peut être altitude_m
@@ -129,23 +132,38 @@ def create_mission(
 #   - Définit le point courant à 0
 # ─────────────────────────────────────────────
 
-def send_mission(filename, master=None):
-    print(f"Chargement du fichier .waypoints : {filename}")
+def send_mission(
+    filename: str,
+    master,
+    *,
+    count_timeout: float = 2.0,
+    item_timeout: float = 2.0,
+    max_silence_retries: int = 3
+) -> None:
+    """
+    Envoie un fichier .waypoints avec verrou exclusif MAVLink.
+    - draine les messages
+    - clear + count
+    - répond aux MISSION_REQUEST(_INT) avec l'item demandé
+    - attend un MISSION_ACK en fin de transfert
+    - set current = 0
+    """
 
-    # Lire et parser les waypoints depuis fichier texte
-    with open(filename, 'r') as f:
+    if master is None:
+        raise ValueError("master est requis")
+
+    # Lire/parse le fichier .waypoints
+    with open(filename, "r") as f:
         lines = f.readlines()
+    if not lines or not lines[0].startswith("QGC WPL 110"):
+        raise RuntimeError("Format .waypoints invalide (header manquant).")
 
-    if not lines[0].startswith("QGC WPL 110"):
-        print("Format de fichier invalide. Attendu : 'QGC WPL 110'")
-        return
-
-    waypoints = []
+    waypoints: List[Dict[str, Any]] = []
     for line in lines[1:]:
-        parts = line.strip().split('\t')
+        parts = line.strip().split("\t")
         if len(parts) != 12:
             continue
-        wp = {
+        waypoints.append({
             "seq": int(parts[0]),
             "current": int(parts[1]),
             "frame": int(parts[2]),
@@ -157,37 +175,105 @@ def send_mission(filename, master=None):
             "lat": float(parts[8]),
             "lon": float(parts[9]),
             "alt": float(parts[10]),
-            "autoContinue": int(parts[11])
-        }
-        waypoints.append(wp)
+            "autoContinue": int(parts[11]),
+        })
 
-    # Efface l'ancienne mission
-    master.waypoint_clear_all_send()
-    time.sleep(1)
+    n = len(waypoints)
+    if n == 0:
+        raise RuntimeError("Aucun waypoint à envoyer.")
 
-    # Envoie le nombre de waypoints
-    master.waypoint_count_send(len(waypoints))
-    print(f"Envoi de {len(waypoints)} waypoints...")
+    print(f"[mission] Envoi de {n} waypoints depuis {filename}")
 
-    for wp in waypoints:
-        msg = master.recv_match(type='MISSION_REQUEST', blocking=True, timeout=10)
-        if msg and msg.seq == wp["seq"]:
-            master.mav.mission_item_send(
-                master.target_system,
-                master.target_component,
-                wp["seq"],
-                wp["frame"],
-                wp["command"],
-                wp["current"],
-                wp["autoContinue"],
-                wp["param1"], wp["param2"], wp["param3"], wp["param4"],
-                wp["lat"], wp["lon"], wp["alt"]
+    with MISSION_IO_LOCK:
+        # 0) Nettoyer d’éventuels messages en attente
+        _drain_mav(master, 0.2)
+
+        # 1) Clear ancien plan
+        master.waypoint_clear_all_send()
+        time.sleep(0.1)
+
+        # 2) Envoyer le COUNT
+        master.waypoint_count_send(n)
+
+        # 3) Boucle jusqu’à ce que tous les items soient demandés
+        sent = set()
+        silence_retries = 0
+
+        while len(sent) < n:
+            msg = master.recv_match(
+                type=['MISSION_REQUEST_INT', 'MISSION_REQUEST'],
+                blocking=True,
+                timeout=item_timeout
             )
-            print(f"WP {wp['seq']} envoyé")
-        else:
-            print(f"Pas de demande pour WP {wp['seq']}")
 
-    time.sleep(1)
+            if msg is None:
+                # L’autopilote n’a rien demandé — on renvoie COUNT pour relancer
+                silence_retries += 1
+                if silence_retries > max_silence_retries:
+                    raise RuntimeError("Pas de MISSION_REQUEST reçu (timeout).")
+                print("[mission] Silence → renvoi du COUNT")
+                master.waypoint_count_send(n)
+                continue
+
+            # Dès qu’on reçoit quelque chose, on reset le compteur de silence
+            silence_retries = 0
+
+            req_type = msg.get_type()
+            req_seq = int(getattr(msg, "seq", -1))
+            if req_seq < 0 or req_seq >= n:
+                print(f"[mission] Requête seq hors bornes ({req_seq}) ignorée.")
+                continue
+
+            wp = waypoints[req_seq]
+
+            if req_type == 'MISSION_REQUEST_INT':
+                master.mav.mission_item_int_send(
+                    master.target_system,
+                    master.target_component,
+                    req_seq,
+                    wp["frame"],
+                    wp["command"],
+                    wp["current"],
+                    wp["autoContinue"],
+                    float(wp["param1"]),
+                    float(wp["param2"]),
+                    float(wp["param3"]),
+                    float(wp["param4"]),
+                    int(wp["lat"] * 1e7),
+                    int(wp["lon"] * 1e7),
+                    float(wp["alt"]),
+                )
+            else:
+                # Version float classique
+                master.mav.mission_item_send(
+                    master.target_system,
+                    master.target_component,
+                    req_seq,
+                    wp["frame"],
+                    wp["command"],
+                    wp["current"],
+                    wp["autoContinue"],
+                    float(wp["param1"]),
+                    float(wp["param2"]),
+                    float(wp["param3"]),
+                    float(wp["param4"]),
+                    float(wp["lat"]),
+                    float(wp["lon"]),
+                    float(wp["alt"]),
+                )
+
+            sent.add(req_seq)
+            print(f"[mission] WP {req_seq} envoyé ({req_type})")
+
+        # 4) Attendre l’ACK de fin de transfert
+        ack = master.recv_match(type='MISSION_ACK', blocking=True, timeout=count_timeout)
+        if not ack:
+            raise RuntimeError("MISSION_ACK non reçu (timeout).")
+        print(f"[mission] ACK reçu: {getattr(ack, 'type', 'UNKNOWN')}")
+
+        # 5) Définir le waypoint courant à 0
+        master.mav.mission_set_current_send(master.target_system, master.target_component, 0)
+        print("[mission] Waypoint courant défini à 0 → Mission envoyée.")
 
     # Définit le waypoint courant à 0
     master.mav.mission_set_current_send(master.target_system, master.target_component, 0)
@@ -264,60 +350,97 @@ def modify_mission(filename, seq_to_modify, updated_fields):
 
     print(f"Fichier mis à jour : {filename}")
 
-def download_mission(master, timeout: float = 5.0) -> List[Dict[str, Any]]:
-    """
-    Récupère la mission actuellement chargée dans l'autopilote.
-    Retourne une liste de dicts compatibles avec ton format .waypoints.
-    Gère MISSION_ITEM_INT et MISSION_ITEM.
-    """
-    # Demander le nombre d'items
-    master.mav.mission_request_list_send(master.target_system, master.target_component)
-    count_msg = master.recv_match(type='MISSION_COUNT', blocking=True, timeout=timeout)
-    if not count_msg:
-        raise RuntimeError("MISSION_COUNT non reçu (timeout).")
-    count = int(count_msg.count)
-
-    items: List[Dict[str, Any]] = []
-
-    for i in range(count):
-        # On tente d'abord la version INT, puis fallback
-        master.mav.mission_request_int_send(master.target_system, master.target_component, i)
-        msg = master.recv_match(type=['MISSION_ITEM_INT', 'MISSION_ITEM'], blocking=True, timeout=timeout)
-
+def _drain_mav(master, duration=0.2):
+    t0 = time.time()
+    while time.time() - t0 < duration:
+        msg = master.recv_match(blocking=False, timeout=0)
         if msg is None:
-            master.mav.mission_request_send(master.target_system, master.target_component, i)
-            msg = master.recv_match(type=['MISSION_ITEM', 'MISSION_ITEM_INT'], blocking=True, timeout=timeout)
+            break
 
-        if msg is None:
-            raise RuntimeError(f"Item {i}: pas de réponse MISSION_ITEM(_INT).")
+def download_mission(master, timeout: float = 2.0, retries: int = 3) -> List[Dict[str, Any]]:
+    """
+    Télécharge de façon robuste la mission chargée:
+      - verrou exclusif MAVLink
+      - drain du pipe
+      - requêtes avec retries
+      - vérification du seq
+      - MISSION_ACK en fin de transfert
+    """
+    with MISSION_IO_LOCK:
+        # Nettoyer d'éventuels vieux messages
+        _drain_mav(master, 0.2)
 
-        mtype = msg.get_type()
-        if mtype == 'MISSION_ITEM_INT':
-            lat = float(msg.x) / 1e7
-            lon = float(msg.y) / 1e7
-            alt = float(msg.z)
-        else:  # 'MISSION_ITEM'
-            lat = float(msg.x)
-            lon = float(msg.y)
-            alt = float(msg.z)
+        # 1) Demander la liste
+        for attempt in range(retries):
+            master.mav.mission_request_list_send(master.target_system, master.target_component)
+            count_msg = master.recv_match(type='MISSION_COUNT', blocking=True, timeout=timeout)
+            if count_msg:
+                break
+        if not count_msg:
+            raise RuntimeError("MISSION_COUNT non reçu (timeout).")
 
-        items.append({
-            "seq": int(getattr(msg, "seq", i)),
-            "current": int(getattr(msg, "current", 0)),
-            "frame": int(getattr(msg, "frame", 0)),
-            "command": int(getattr(msg, "command", 16)),
-            "param1": float(getattr(msg, "param1", 0.0)),
-            "param2": float(getattr(msg, "param2", 0.0)),
-            "param3": float(getattr(msg, "param3", 0.0)),
-            "param4": float(getattr(msg, "param4", 0.0)),
-            "lat": lat,
-            "lon": lon,
-            "alt": alt,
-            "autoContinue": int(getattr(msg, "autocontinue", 1)),
-        })
+        count = int(count_msg.count)
+        items: List[Dict[str, Any]] = [None] * count  # type: ignore
 
-    return items
+        # 2) Demander chaque item avec retries et vérif du seq
+        for i in range(count):
+            got = False
+            for attempt in range(retries):
+                # Demande INT d'abord
+                master.mav.mission_request_int_send(master.target_system, master.target_component, i)
+                msg = master.recv_match(type=['MISSION_ITEM_INT', 'MISSION_ITEM'], blocking=True, timeout=timeout)
 
+                if msg is None:
+                    # Fallback: demande non-INT
+                    master.mav.mission_request_send(master.target_system, master.target_component, i)
+                    msg = master.recv_match(type=['MISSION_ITEM', 'MISSION_ITEM_INT'], blocking=True, timeout=timeout)
+
+                if msg is None:
+                    continue  # retry
+
+                seq = int(getattr(msg, "seq", i))
+                if seq != i:
+                    # message hors ordre -> on réessaye (ou on range à l'index reçu si tu préfères)
+                    continue
+
+                if msg.get_type() == 'MISSION_ITEM_INT':
+                    lat = float(msg.x) / 1e7
+                    lon = float(msg.y) / 1e7
+                    alt = float(msg.z)
+                else:
+                    lat = float(msg.x)
+                    lon = float(msg.y)
+                    alt = float(msg.z)
+
+                items[i] = {
+                    "seq": seq,
+                    "current": int(getattr(msg, "current", 0)),
+                    "frame": int(getattr(msg, "frame", 0)),
+                    "command": int(getattr(msg, "command", 16)),
+                    "param1": float(getattr(msg, "param1", 0.0)),
+                    "param2": float(getattr(msg, "param2", 0.0)),
+                    "param3": float(getattr(msg, "param3", 0.0)),
+                    "param4": float(getattr(msg, "param4", 0.0)),
+                    "lat": lat,
+                    "lon": lon,
+                    "alt": alt,
+                    "autoContinue": int(getattr(msg, "autocontinue", 1)),
+                }
+                got = True
+                break
+
+            if not got:
+                raise RuntimeError(f"Item {i}: pas de réponse MISSION_ITEM(_INT).")
+
+        # 3) ACK en fin de transfert (important pour finir la session mission)
+        master.mav.mission_ack_send(
+            master.target_system,
+            master.target_component,
+            mavutil.mavlink.MAV_MISSION_ACCEPTED,
+            0
+        )
+
+        return [it for it in items if it is not None]
 
 # --- Point d'entrée ---
 if __name__ == "__main__":

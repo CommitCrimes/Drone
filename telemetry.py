@@ -2,6 +2,9 @@ import time, threading
 from typing import Dict, Any, Optional
 from pymavlink import mavutil
 
+# 🔐 Verrou global d'E/S MAVLink, exporté pour éventuel partage
+MAVLINK_IO_LOCK = threading.RLock()
+
 class TelemetryCache:
     def __init__(self) -> None:
         self._lock = threading.RLock()
@@ -32,19 +35,36 @@ class TelemetryCache:
             }
 
 def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event) -> None:
+    # Demande un flux de télémétrie (protégé par le verrou pour ne pas chevaucher une autre session)
     try:
-        master.mav.request_data_stream_send(
-            master.target_system, master.target_component,
-            mavutil.mavlink.MAV_DATA_STREAM_ALL, 2, 1
-        )
+        with MAVLINK_IO_LOCK:
+            master.mav.request_data_stream_send(
+                master.target_system, master.target_component,
+                mavutil.mavlink.MAV_DATA_STREAM_ALL, 2, 1
+            )
     except Exception:
         pass
 
+    # Types "mission" à éviter d'avaler côté télémétrie
+    MISSION_TYPES = {
+        "MISSION_COUNT", "MISSION_REQUEST", "MISSION_REQUEST_INT",
+        "MISSION_ITEM", "MISSION_ITEM_INT", "MISSION_ACK",
+        "MISSION_CLEAR_ALL", "MISSION_SET_CURRENT"
+    }
+
     while not stop_event.is_set():
         try:
-            msg = master.recv_match(blocking=True, timeout=1)
+            # On ne garde le verrou que pendant la lecture, pour le relâcher vite
+            with MAVLINK_IO_LOCK:
+                msg = master.recv_match(blocking=True, timeout=0.5)
             if msg is None:
                 continue
+
+            t = msg.get_type()
+            # Ne PAS consommer la mission côté cache (on ignore juste ces messages)
+            if t in MISSION_TYPES:
+                continue
+
             cache.update_from_msg(msg)
         except Exception:
             continue
