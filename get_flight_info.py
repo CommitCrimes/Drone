@@ -1,7 +1,8 @@
 import math, time
 from typing import Dict, Any
+import json
 from pymavlink import mavutil
-from telemetry import TelemetryCache
+from telemetry import TelemetryCache, MAVLINK_IO_LOCK 
 
 def build_flight_info(
     drone_id: str,
@@ -10,13 +11,12 @@ def build_flight_info(
     allow_stale: bool = True,
 ) -> Dict[str, Any]:
     snap = cache.snapshot()
-    hb = snap["heartbeat"]
-    gp = snap["global_position"]
-    ts = snap["ts"]
+    hb = snap.get("heartbeat")
+    gp = snap.get("global_position")
+    ts = snap.get("ts", {})
     now = time.time()
 
     if gp is None or hb is None:
-        # Rien du tout en cache
         raise RuntimeError("Aucune donnée de position ou heartbeat reçue.")
 
     age_pos = now - ts.get("GLOBAL_POSITION_INT", 0)
@@ -39,26 +39,41 @@ def build_flight_info(
         "vertical_speed_m_s": round(vz, 2),
         "heading_deg": (gp.hdg / 100.0) if getattr(gp, "hdg", None) is not None else 0.0,
         "movement_track_deg": (gp.hdg / 100.0) if getattr(gp, "hdg", None) is not None else None,
-        "battery_remaining_percent": getattr(snap["battery"], "battery_remaining", None) if snap["battery"] else None,
-        # Meta pour le client:
+        "battery_remaining_percent": getattr(snap.get("battery"), "battery_remaining", None)
+            if snap.get("battery") else None,
         "stale": is_stale,
         "age_sec": {"position": round(age_pos, 3), "heartbeat": round(age_hb, 3)},
     }
 
-def flight_info(drone_id, master, timeout: float = 5.0, request_stream: bool = True) -> Dict[str, Any]:
-    if request_stream:
-        try:
-            master.mav.request_data_stream_send(
-                master.target_system, master.target_component,
-                mavutil.mavlink.MAV_DATA_STREAM_ALL, 2, 1
-            )
-        except Exception:
-            pass
-    hb = master.recv_match(type="HEARTBEAT", blocking=True, timeout=timeout)
-    gp = master.recv_match(type="GLOBAL_POSITION_INT", blocking=True, timeout=timeout)
+
+def flight_info(
+    drone_id: str,
+    master,
+    timeout: float = 5.0,
+    request_stream: bool = True
+) -> Dict[str, Any]:
+    """
+    Lecture directe sur le lien MAVLink (sans passer par le cache).
+    Protégée par MAVLINK_IO_LOCK pour éviter les collisions avec la télémétrie/mission.
+    """
+    with MAVLINK_IO_LOCK:
+        if request_stream:
+            try:
+                master.mav.request_data_stream_send(
+                    master.target_system, master.target_component,
+                    mavutil.mavlink.MAV_DATA_STREAM_ALL, 2, 1
+                )
+            except Exception:
+                pass
+
+        hb = master.recv_match(type="HEARTBEAT", blocking=True, timeout=timeout)
+        gp = master.recv_match(type="GLOBAL_POSITION_INT", blocking=True, timeout=timeout)
+
     if not hb or not gp:
         raise RuntimeError("Aucune donnée de position ou heartbeat reçue.")
+
     vx, vy, vz = gp.vx/100.0, gp.vy/100.0, gp.vz/100.0
+
     return {
         "drone_id": str(drone_id),
         "is_armed": (hb.base_mode & mavutil.mavlink.MAV_MODE_FLAG_SAFETY_ARMED) != 0,
@@ -70,5 +85,5 @@ def flight_info(drone_id, master, timeout: float = 5.0, request_stream: bool = T
         "vertical_speed_m_s": round(vz, 2),
         "heading_deg": (gp.hdg / 100.0) if getattr(gp, "hdg", None) is not None else 0.0,
         "movement_track_deg": (gp.hdg / 100.0) if getattr(gp, "hdg", None) is not None else None,
-        "battery_remaining_percent": None,
+        "battery_remaining_percent": None, 
     }

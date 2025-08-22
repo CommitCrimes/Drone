@@ -1,218 +1,174 @@
-import os
-import json
+# app.py (version simplifiée/multi-drones, mêmes noms de fonctions)
+import os, json, threading
 from collections import OrderedDict
+from typing import Dict, Tuple, Optional
 from flask import Flask, jsonify, request, Response
 from pymavlink import mavutil
-from telemetry import start_telemetry_reader, GLOBAL_CACHE
-from get_flight_info import build_flight_info, flight_info as flight_info_direct
 
+from telemetry import telemetry_reader, TelemetryCache
+from get_flight_info import build_flight_info
 from init_log import logger
-from mission_tool import create_mission, send_mission, modify_mission
-from start_mission import start
 from mission_tool import create_mission, send_mission, modify_mission, download_mission
+from start_mission import start
 
 # ─────────────────────────────────────────────
-# Config
+# Config & registre
 # ─────────────────────────────────────────────
 with open("config.json", "r") as f:
-    config = json.load(f)
-drone_id = config.get("drone_id", "undefined")
+    CONFIG = json.load(f)
 
-# ─────────────────────────────────────────────
-# Flask & MAVLink
-# ─────────────────────────────────────────────
+DRONES: Dict[int, Dict[str, object]] = {}
+
 app = Flask(__name__)
 
-logger.info("Connexion MAVLink…")
-master = mavutil.mavlink_connection("udp:127.0.0.1:14550")
-master.wait_heartbeat()
-logger.info("Heartbeat MAVLink reçu")
+for d in CONFIG.get("drones", []):
+    did = int(d["id"])
+    url = str(d["conn"])
 
-# Thread télémétrie
-start_telemetry_reader(master)
-logger.info("Thread télémétrie démarré")
+    master = mavutil.mavlink_connection(url)
+    master.wait_heartbeat()
+    logger.info(f"[drone {did}] Heartbeat via {url}")
+
+    cache = TelemetryCache()
+    stop_evt = threading.Event()
+    t = threading.Thread(target=telemetry_reader, args=(master, cache, stop_evt), daemon=True)
+    t.start()
+    logger.info(f"[drone {did}] Thread télémétrie démarré")
+
+    DRONES[did] = {"master": master, "cache": cache, "stop": stop_evt}
+
+def _get_drone_or_404(drone_id: int) -> Tuple[Optional[Dict[str, object]], Optional[Tuple[Response, int]]]:
+    entry = DRONES.get(drone_id)
+    if not entry:
+        return None, (jsonify(error=f"Drone {drone_id} introuvable"), 404)
+    return entry, None
 
 # ─────────────────────────────────────────────
-@app.route("/")
-def hello_world():
-    response = OrderedDict(status="ok", message=f"API du drone: {drone_id}")
+# Routes
+# ─────────────────────────────────────────────
+@app.get("/")
+def root():
+    response = OrderedDict(
+        status="ok",
+        drones=[{"id": d["id"], "conn": d["conn"], "connected": (int(d["id"]) in DRONES)}
+                for d in CONFIG.get("drones", [])]
+    )
     logger.info("GET /")
     return Response(json.dumps(response), mimetype="application/json")
 
+@app.get("/drones")
+def list_drones():
+    return jsonify([{"id": did, "connected": True} for did in sorted(DRONES.keys())])
 
-# ─────────────────────────────────────────────
-# POST /start
-@app.route("/start", methods=["POST"])
-def start_mission_route():
-    try:
-        start(master)
-        logger.info("Script start_mission.py lancé")
-        return jsonify(message="Script start_mission.py lancé"), 200
-    except Exception as e:
-        logger.exception("Erreur start_mission")
-        return jsonify(error=str(e)), 500
+@app.get("/drones/<int:drone_id>/flight_info")
+def api_flight_info(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    strict = request.args.get('strict') in ('1', 'true', 'True')
+    data = build_flight_info(drone_id, entry["cache"], allow_stale=not strict)  
+    if data.get("stale"):
+        logger.warning(f"[{drone_id}] Télémétrie stale: {data.get('age_sec')}")
+    return jsonify(data), 200
 
+@app.post("/drones/<int:drone_id>/command")
+def send_command(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    master = entry["master"]
+    data = request.get_json(force=True)
+    mode = str(data.get("mode", "")).upper()
+    if not mode:
+        return jsonify(error="Champ 'mode' requis"), 400
+    if mode not in master.mode_mapping():
+        return jsonify(error=f"Mode '{mode}' non supporté"), 400
+    master.set_mode(master.mode_mapping()[mode])
+    logger.info(f"[{drone_id}] Mode -> {mode}")
+    return jsonify(message=f"Mode changé vers {mode}"), 200
 
-# ─────────────────────────────────────────────
-# POST /mission/create
-@app.route("/mission/create", methods=["POST"])
-def api_create_mission():
-    try:
-        data = request.get_json(force=True)
-        filename = data.get("filename", "mission.waypoints")
-        altitude_takeoff = data.get("altitude_takeoff", 30)
-        waypoints = data.get("waypoints", [])
-        mode = data.get("mode", "auto")
+@app.post("/drones/<int:drone_id>/start")
+def start_mission_route(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    start(entry["master"])
+    logger.info(f"[{drone_id}] start_mission lancé")
+    return jsonify(message=f"Mission démarrée (drone {drone_id})"), 200
 
-        startlat = data.get("startlat")
-        startlon = data.get("startlon")
-        startalt = data.get("startalt")
+@app.post("/drones/<int:drone_id>/mission/create")
+def api_create_mission(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    data = request.get_json(force=True)
+    filename = data.get("filename", "mission.waypoints")
+    altitude_takeoff = data.get("altitude_takeoff", 30)
+    waypoints = data.get("waypoints", [])
+    mode = data.get("mode", "auto")
+    startlat = data.get("startlat")
+    startlon = data.get("startlon")
+    startalt = data.get("startalt")
 
-        if (startlat is None) ^ (startlon is None):
-            logger.warning("startlat/startlon incomplets — fallback sur flight_info")
-            startlat = None
-            startlon = None
+    create_mission(
+        entry["master"], filename, altitude_takeoff, waypoints, mode,
+        startlat=startlat, startlon=startlon, startalt=startalt,
+        drone_id=drone_id
+    )
+    return jsonify(message=f"Mission créée dans {filename}", filename=filename), 201
 
-        create_mission(
-            master,
-            filename,
-            altitude_takeoff,
-            waypoints,
-            mode,
-            startlat=startlat,
-            startlon=startlon,
-            startalt=startalt,
-        )
+@app.post("/drones/<int:drone_id>/mission/send")
+def api_send_mission(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    master = entry["master"]
 
-        logger.info(
-            f"Mission créée : {filename}, altitude={altitude_takeoff}, mode={mode}, "
-            f"start=({startlat},{startlon},{startalt})"
-        )
-        return jsonify(message=f"Mission créée dans {filename}", filename=filename), 201
-    except Exception as e:
-        logger.exception("Erreur création mission")
-        return jsonify(error=str(e)), 500
-
-# ─────────────────────────────────────────────
-# POST /mission/send
-@app.route("/mission/send", methods=["POST"])
-def api_send_mission():
-    try:
-        # Upload direct
-        if "file" in request.files:
-            file = request.files["file"]
-            if not file.filename.endswith(".waypoints"):
-                logger.warning("Fichier non .waypoints rejeté")
-                return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
-
-            filepath = os.path.join("/tmp", file.filename)
-            file.save(filepath)
-            send_mission(filepath, master)
-            logger.info(f"Mission envoyée depuis fichier uploadé : {file.filename}")
-            return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
-
-        # Ou référence à un fichier existant
-        data = request.get_json(silent=True) or {}
-        filename = data.get("filename")
-        if not filename:
-            logger.warning("Ni fichier uploadé ni 'filename' fourni")
-            return jsonify(error="Aucun fichier reçu et aucun 'filename' fourni"), 400
-
-        if not filename.endswith(".waypoints"):
-            return jsonify(error="Le fichier doit avoir l'extension .waypoints"), 400
-
-        filepath = filename
-        if not os.path.isabs(filepath):
-            if not filepath.startswith("missions" + os.sep) and not filepath.startswith("missions/"):
-                filepath = os.path.join("missions", filepath)
-
-        if not os.path.exists(filepath):
-            logger.warning(f"Fichier introuvable: {filepath}")
-            return jsonify(error=f"Fichier introuvable: {filepath}"), 404
-
+    if "file" in request.files:
+        file = request.files["file"]
+        if not file.filename.endswith(".waypoints"):
+            return jsonify(error="Le fichier doit être .waypoints"), 400
+        filepath = os.path.join("/tmp", file.filename)
+        file.save(filepath)
         send_mission(filepath, master)
-        logger.info(f"Mission envoyée depuis fichier existant : {filepath}")
-        return jsonify(message=f"Mission envoyée depuis {filepath}"), 200
+        logger.info(f"[{drone_id}] Mission envoyée depuis upload: {file.filename}")
+        return jsonify(message=f"Mission envoyée depuis {file.filename}"), 200
 
-    except Exception as e:
-        logger.exception("Erreur envoi mission")
-        return jsonify(error=str(e)), 500
+    data = request.get_json(silent=True) or {}
+    filename = data.get("filename")
+    if not filename:
+        return jsonify(error="Aucun fichier reçu et aucun 'filename' fourni"), 400
+    if not filename.endswith(".waypoints"):
+        return jsonify(error="Le fichier doit être .waypoints"), 400
 
+    filepath = filename if os.path.isabs(filename) else os.path.join("missions", filename)
+    if not os.path.exists(filepath):
+        return jsonify(error=f"Fichier introuvable: {filepath}"), 404
 
-# ─────────────────────────────────────────────
-# POST /mission/modify
-@app.route("/mission/modify", methods=["POST"])
-def api_modify_mission():
-    try:
-        data = request.get_json(force=True)
-        filename = data["filename"]
-        seq = int(data["seq"])
-        updates = data["updates"]
-        modify_mission(master, filename, seq, updates)
-        logger.info(f"Mission modifiée : {filename} seq={seq}")
-        return jsonify(message="Mission modifiée"), 200
-    except Exception as e:
-        logger.exception("Erreur modification mission")
-        return jsonify(error=str(e)), 500
+    send_mission(filepath, master)
+    logger.info(f"[{drone_id}] Mission envoyée: {filepath}")
+    return jsonify(message=f"Mission envoyée depuis {filepath}"), 200
 
+@app.post("/drones/<int:drone_id>/mission/modify")
+def api_modify_mission(drone_id: int):
+    data = request.get_json(force=True)
+    filename = data["filename"]
+    seq = int(data["seq"])
+    updates = data["updates"]
 
-# ─────────────────────────────────────────────
-# GET /flight_info
-@app.route("/flight_info", methods=["GET"])
-def api_flight_info():
-    try:
-        # on peut garder un query param si tu veux forcer strict:
-        # ?strict=1 retournera 503 si stale
-        strict = request.args.get('strict') in ('1', 'true', 'True')
-        data = build_flight_info(drone_id, GLOBAL_CACHE, allow_stale=not strict)
-        if data.get("stale"):
-            logger.warning("Télémétrie stale: ages=%s", data.get("age_sec"))
-        else:
-            logger.info("Données de vol récupérées (cache)")
-        return jsonify(data), 200
-    except Exception as e:
-        logger.error(f"Erreur récupération infos vol: {str(e)}")
-        return jsonify(error=str(e)), 503
+    filepath = filename
+    if not os.path.isabs(filepath):
+        if not filepath.startswith("missions" + os.sep) and not filepath.startswith("missions/"):
+            filepath = os.path.join("missions", filepath)
+    if not os.path.exists(filepath):
+        return jsonify(error=f"Fichier introuvable: {filepath}"), 404
 
-    
+    modify_mission(filepath, seq, updates)
+    logger.info(f"[{drone_id}] Mission modifiée: {filepath} seq={seq}")
+    return jsonify(message="Mission modifiée"), 200
 
-# ─────────────────────────────────────────────
-# POST /command
-@app.route("/command", methods=["POST"])
-def send_command():
-    try:
-        data = request.get_json(force=True)
-        mode = str(data.get("mode", "")).upper()
+@app.get("/drones/<int:drone_id>/mission/current")
+def api_mission_current(drone_id: int):
+    entry, err = _get_drone_or_404(drone_id)
+    if err: return err
+    items = download_mission(entry["master"])
+    return jsonify({"count": len(items), "items": items}), 200
 
-        if not mode:
-            logger.warning("Champ 'mode' manquant dans /command")
-            return jsonify(error="Champ 'mode' requis"), 400
-
-        if mode not in master.mode_mapping():
-            logger.warning(f"Mode '{mode}' non supporté")
-            return jsonify(error=f"Mode '{mode}' non supporté"), 400
-
-        mode_id = master.mode_mapping()[mode]
-        master.set_mode(mode_id)
-        logger.info(f"Mode changé vers {mode}")
-        return jsonify(message=f"Mode changé vers {mode}"), 200
-
-    except Exception as e:
-        logger.exception("Erreur changement de mode")
-        return jsonify(error=str(e)), 500
-# nouvelle route
-@app.route("/mission/current", methods=["GET"])
-def api_mission_current():
-    try:
-        items = download_mission(master)
-        # tu peux renvoyer tel quel ; c'est déjà "waypoints-like"
-        return jsonify({"count": len(items), "items": items}), 200
-    except Exception as e:
-        logger.exception("Erreur récupération mission courante")
-        return jsonify(error=str(e)), 500
-
-
-# ─────────────────────────────────────────────
 if __name__ == "__main__":
-    logger.info("Démarrage de l'API Flask du drone (debug)")
+    logger.info("Démarrage API Flask multi-drones (debug)")
     app.run(debug=True, host="0.0.0.0", port=5000)

@@ -7,16 +7,10 @@ from get_flight_info import flight_info
 import time
 from typing import List, Dict, Any
 import threading
-MISSION_IO_LOCK = threading.RLock()
+from telemetry import MAVLINK_IO_LOCK  # même verrou que la télémétrie
 
 
 import json
-#Rajouter une premiere ligne pour le take off qui correspond a l'emplacement actuel du drone Faire une request Flight info pour récupérer la position
-with open("config.json", "r") as f:
-    config = json.load(f)
-
-# Accéder aux valeurs
-drone_id = config["drone_id"]
 
 # ─────────────────────────────────────────────
 # Fonction : create_mission
@@ -39,7 +33,8 @@ def create_mission(
     mode="auto",
     startlat=None,
     startlon=None,
-        startalt=None,
+    startalt=None,
+    drone_id=None,
 ):
     mission_waypoints = []
 
@@ -53,8 +48,8 @@ def create_mission(
             longitude = float(startlon)
             altitude0 = float(startalt) if startalt is not None else float(altitude_takeoff)
         else:
-            with MISSION_IO_LOCK:
-                info = flight_info(drone_id, master)
+            with MAVLINK_IO_LOCK:
+                info = flight_info(drone_id if drone_id is not None else 0, master)
             latitude  = float(info["latitude"])
             longitude = float(info["longitude"])
             # compat: selon ta fonction flight_info, la clé peut être altitude_m
@@ -184,7 +179,7 @@ def send_mission(
 
     print(f"[mission] Envoi de {n} waypoints depuis {filename}")
 
-    with MISSION_IO_LOCK:
+    with MAVLINK_IO_LOCK:
         # 0) Nettoyer d’éventuels messages en attente
         _drain_mav(master, 0.2)
 
@@ -366,7 +361,7 @@ def download_mission(master, timeout: float = 2.0, retries: int = 3) -> List[Dic
       - vérification du seq
       - MISSION_ACK en fin de transfert
     """
-    with MISSION_IO_LOCK:
+    with MAVLINK_IO_LOCK:
         # Nettoyer d'éventuels vieux messages
         _drain_mav(master, 0.2)
 
