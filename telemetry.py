@@ -1,10 +1,13 @@
 import time, threading
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Hashable
 from pymavlink import mavutil
 
-# 🔐 Verrou global d'E/S MAVLink, exporté pour éventuel partage
+# Verrou I/O MAVLink partagé (évite les collisions avec d'autres threads, ex: missions)
 MAVLINK_IO_LOCK = threading.RLock()
 
+# ─────────────────────────────────────────────
+# Cache de télémétrie
+# ─────────────────────────────────────────────
 class TelemetryCache:
     def __init__(self) -> None:
         self._lock = threading.RLock()
@@ -34,8 +37,11 @@ class TelemetryCache:
                 "ts": dict(self._ts),
             }
 
+# ─────────────────────────────────────────────
+# Boucle lecteur
+# ─────────────────────────────────────────────
 def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event) -> None:
-    # Demande un flux de télémétrie (protégé par le verrou pour ne pas chevaucher une autre session)
+    # Demande d'un flux de télémétrie
     try:
         with MAVLINK_IO_LOCK:
             master.mav.request_data_stream_send(
@@ -45,7 +51,7 @@ def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event)
     except Exception:
         pass
 
-    # Types "mission" à éviter d'avaler côté télémétrie
+    # Messages "mission" à ne pas consommer ici
     MISSION_TYPES = {
         "MISSION_COUNT", "MISSION_REQUEST", "MISSION_REQUEST_INT",
         "MISSION_ITEM", "MISSION_ITEM_INT", "MISSION_ACK",
@@ -54,30 +60,77 @@ def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event)
 
     while not stop_event.is_set():
         try:
-            # On ne garde le verrou que pendant la lecture, pour le relâcher vite
             with MAVLINK_IO_LOCK:
                 msg = master.recv_match(blocking=True, timeout=0.5)
             if msg is None:
                 continue
-
-            t = msg.get_type()
-            # Ne PAS consommer la mission côté cache (on ignore juste ces messages)
-            if t in MISSION_TYPES:
+            if msg.get_type() in MISSION_TYPES:
                 continue
-
             cache.update_from_msg(msg)
         except Exception:
             continue
 
-GLOBAL_CACHE = TelemetryCache()
-_STOP_EVENT = threading.Event()
-_READER_THREAD: Optional[threading.Thread] = None
+# ─────────────────────────────────────────────
+# Multi-drones: registre de threads/caches par clé
+# ─────────────────────────────────────────────
+_CACHES: Dict[Hashable, TelemetryCache] = {}
+_STOPS: Dict[Hashable, threading.Event] = {}
+_THREADS: Dict[Hashable, threading.Thread] = {}
 
-def start_telemetry_reader(master) -> None:
-    global _READER_THREAD
-    if _READER_THREAD and _READER_THREAD.is_alive():
-        return
-    _READER_THREAD = threading.Thread(
-        target=telemetry_reader, args=(master, GLOBAL_CACHE, _STOP_EVENT), daemon=True
-    )
-    _READER_THREAD.start()
+# Rétro-compat (si on appelle sans key/cache)
+GLOBAL_CACHE = TelemetryCache()
+_LEGACY_KEY: Hashable = "__legacy__"
+
+def start_telemetry_reader(
+    master,
+    cache: Optional[TelemetryCache] = None,
+    key: Optional[Hashable] = None,
+) -> TelemetryCache:
+    """
+    Démarre (ou réutilise) un lecteur de télémétrie pour 'key'.
+    - key: identifiant du drone (ex: drone_id). Si None, on utilise un mode legacy global.
+    - cache: si None, un TelemetryCache est créé (ou GLOBAL_CACHE en legacy).
+    Retourne le cache utilisé.
+    """
+    # Mode legacy (compat)
+    if cache is None and key is None:
+        key = _LEGACY_KEY
+        cache = GLOBAL_CACHE
+
+    # Clé par défaut si non fournie: identifiant unique du master
+    if key is None:
+        key = id(master)
+    if cache is None:
+        cache = TelemetryCache()
+
+    thr = _THREADS.get(key)
+    if thr and thr.is_alive():
+        # déjà lancé → retourne le cache existant
+        return _CACHES[key]
+
+    stop = threading.Event()
+    t = threading.Thread(target=telemetry_reader, args=(master, cache, stop), daemon=True)
+    _CACHES[key] = cache
+    _STOPS[key] = stop
+    _THREADS[key] = t
+    t.start()
+    return cache
+
+def stop_telemetry_reader(key: Hashable) -> None:
+    """Arrête proprement le thread télémétrie pour la clé donnée."""
+    ev = _STOPS.get(key)
+    if ev:
+        ev.set()
+    thr = _THREADS.get(key)
+    if thr and thr.is_alive():
+        try:
+            thr.join(timeout=2.0)
+        except Exception:
+            pass
+    _CACHES.pop(key, None)
+    _STOPS.pop(key, None)
+    _THREADS.pop(key, None)
+
+def get_cache(key: Hashable) -> Optional[TelemetryCache]:
+    """Récupère le cache de télémétrie associé à 'key' (ou None s'il n'existe pas)."""
+    return _CACHES.get(key)
