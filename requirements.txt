@@ -1,0 +1,4 @@
+Flask>=3.0.0
+pymavlink>=2.4.41
+future>=0.18.3
+lxml>=5.1.0

@@ -24,8 +24,9 @@ app = Flask(__name__)
 for d in CONFIG.get("drones", []):
     did = int(d["id"])
     url = str(d["conn"])
+    baud = int(d.get("baud", 57600))
 
-    master = mavutil.mavlink_connection(url)
+    master = mavutil.mavlink_connection(url, baud=baud)
     master.wait_heartbeat()
     logger.info(f"[drone {did}] Heartbeat via {url}")
 
@@ -171,4 +172,4 @@ def api_mission_current(drone_id: int):
 
 if __name__ == "__main__":
     logger.info("Démarrage API Flask multi-drones (debug)")
-    app.run(debug=True, host="0.0.0.0", port=5000)
+    app.run(debug=False, host="0.0.0.0", port=5000)
