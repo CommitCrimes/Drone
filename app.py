@@ -8,7 +8,10 @@ from pymavlink import mavutil
 from telemetry import telemetry_reader, TelemetryCache
 from get_flight_info import build_flight_info
 from init_log import logger
-from mission_tool import create_mission, send_mission, modify_mission, download_mission
+from mission_tool import (
+    create_mission, send_mission, modify_mission, download_mission,
+    list_missions, MISSIONS_DIR
+)
 from start_mission import start
 
 # ─────────────────────────────────────────────
@@ -47,6 +50,29 @@ def _get_drone_or_404(drone_id: int) -> Tuple[Optional[Dict[str, object]], Optio
 # ─────────────────────────────────────────────
 # Routes
 # ─────────────────────────────────────────────
+@app.get("/missions")
+def api_list_missions():
+    ext_param = request.args.get("ext")
+    exts = [e.strip() for e in ext_param.split(",")] if ext_param else [".waypoints"]
+    recursive = request.args.get("recursive", "").lower() in ("1", "true")
+    sort  = request.args.get("sort", "mtime")
+    order = request.args.get("order", "desc")
+    try:
+        limit = int(request.args.get("limit")) if request.args.get("limit") else None
+    except ValueError:
+        limit = None
+
+    files = list_missions(
+        base_dir=MISSIONS_DIR,
+        exts=exts,
+        recursive=recursive,
+        sort=sort,
+        order=order,
+        limit=limit,
+    )
+    return jsonify({"count": len(files), "files": files}), 200
+
+
 @app.get("/")
 def root():
     response = OrderedDict(

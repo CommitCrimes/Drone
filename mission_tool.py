@@ -8,9 +8,79 @@ import time
 from typing import List, Dict, Any
 import threading
 from telemetry import MAVLINK_IO_LOCK  # même verrou que la télémétrie
-
-
 import json
+from datetime import datetime
+from typing import Iterable, Optional, List, Dict, Any
+
+MISSIONS_DIR = os.path.abspath("missions")
+os.makedirs(MISSIONS_DIR, exist_ok=True)
+def _norm_exts(exts: Iterable[str]) -> tuple[str, ...]:
+    out = []
+    for e in exts:
+        e = e.strip().lower()
+        if not e:
+            continue
+        if not e.startswith("."):
+            e = "." + e
+        out.append(e)
+    return tuple(out) if out else (".waypoints",)
+
+def list_missions(
+    *,
+    base_dir: Optional[str] = None,
+    exts: Iterable[str] = (".waypoints",),
+    recursive: bool = False,
+    sort: str = "mtime",          # 'name' | 'size' | 'mtime'
+    order: str = "desc",          # 'asc' | 'desc'
+    limit: Optional[int] = None,
+    exclude_prefixes: Iterable[str] = ("DEFAULT",),
+) -> List[Dict[str, Any]]:
+    root = os.path.abspath(base_dir or MISSIONS_DIR)
+    os.makedirs(root, exist_ok=True)
+
+    exts = _norm_exts(exts)
+    excl = tuple(p.upper() for p in exclude_prefixes or ())
+    files: List[Dict[str, Any]] = []
+
+    def _add(path: str) -> None:
+        # Extension
+        if not path.lower().endswith(exts):
+            return
+        # Exclusion par préfixe (insensible à la casse)
+        name = os.path.basename(path)
+        if excl and any(name.upper().startswith(p) for p in excl):
+            return
+
+        st = os.stat(path)
+        files.append({
+            "name": name,
+            "path": os.path.relpath(path, root).replace("\\", "/"),
+            "size_bytes": st.st_size,
+            "mtime": st.st_mtime,
+            "modified_at": datetime.fromtimestamp(st.st_mtime).isoformat(timespec="seconds"),
+        })
+
+    if recursive:
+        for r, _, fnames in os.walk(root):
+            for fn in fnames:
+                _add(os.path.join(r, fn))
+    else:
+        for entry in os.scandir(root):
+            if entry.is_file():
+                _add(entry.path)
+
+    key_map = {
+        "name": lambda x: x["name"].lower(),
+        "size": lambda x: x["size_bytes"],
+        "mtime": lambda x: x["mtime"],
+    }
+    files.sort(key=key_map.get(sort.lower(), key_map["mtime"]), reverse=(order.lower() == "desc"))
+
+    if limit and limit > 0:
+        files = files[:limit]
+
+    return files
+
 
 # ─────────────────────────────────────────────
 # Fonction : create_mission
