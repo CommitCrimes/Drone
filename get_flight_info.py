@@ -4,6 +4,16 @@ import json
 from pymavlink import mavutil
 from telemetry import TelemetryCache, MAVLINK_IO_LOCK 
 
+# ─────────────────────────────────────────────
+# Fonction : build_flight_info
+# But : Construire un snapshot d’infos de vol à partir du cache de télémétrie
+# Étapes :
+#   - Récupère un snapshot (heartbeat, global_position, timestamps)
+#   - Vérifie la fraîcheur des données (stale_after)
+#   - Calcule vitesses horizontale/verticale et cap
+#   - Retourne un dictionnaire normalisé (lat, lon, alt, mode, armé, etc.)
+#   - Lève une erreur si données manquantes ou trop anciennes (si allow_stale=False)
+# ─────────────────────────────────────────────
 def build_flight_info(
     drone_id: str,
     cache: TelemetryCache,
@@ -46,6 +56,16 @@ def build_flight_info(
     }
 
 
+# ─────────────────────────────────────────────
+# Fonction : flight_info
+# But : Lire directement les infos de vol sur le lien MAVLink (sans passer par le cache)
+# Étapes :
+#   - (Optionnel) Demande de flux MAVLink (request_data_stream_send)
+#   - Sous verrou MAVLINK_IO_LOCK : lit HEARTBEAT et GLOBAL_POSITION_INT
+#   - Valide la présence des messages requis
+#   - Calcule vitesses et extrait cap/position/altitude/mode
+#   - Retourne un dictionnaire normalisé (similaire à build_flight_info)
+# ─────────────────────────────────────────────
 def flight_info(
     drone_id: str,
     master,

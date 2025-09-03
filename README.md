@@ -1,71 +1,97 @@
-# Drone
+# Drone API
 
-Ce projet permet de contrôler des missions drones via une API web en Flask. Il s'appuie sur **pymavlink** et permet de créer, lancer et rappeler des missions via des endpoints HTTP.
+Ce projet permet de contrôler des drones (réels ou en simulation) via une **API web Flask**.  
+Il s’appuie sur **pymavlink** pour communiquer avec les drones et propose des endpoints HTTP pour gérer les missions au format `.waypoints`.
 
-## Structure du projet
+---
+
+## 📂 Structure du projet
 
 ```txt
-├── app.py # API Flask principale
-├── create.py # Génère un fichier mission JSON
-├── start_mission.py # Charge et envoie une mission au drone
-├── return_to_home.py # Envoie une commande RTL (return to launch)
-├── get_flight_info.py # Récupère la position et vitesse actuelle
-├── mission.json # Fichier JSON contenant la mission
-├── mission.py # Code principal pour gérer l'envoi de mission
-└── README.md # Ce fichier
+├── app.py                 # API Flask multi-drones
+├── config.json            # Configuration des drones (connexions MAVLink)
+├── get_flight_info.py     # Lecture des infos de vol (position, vitesse…)
+├── init_log.py            # Configuration du logger
+├── mission_tool.py        # Gestion des missions (create, send, modify, download, list)
+├── return_to_home.py      # Commande RTL (Return to Launch)
+├── start_mission.py       # Démarrage d’une mission
+├── telemetry.py           # Thread + cache pour la télémétrie
+├── missions/              # Répertoire des fichiers .waypoints
+├── logs/                  # Logs générés
+├── Documentation/         # Guides Markdown (ex: Create_mission.md)
+├── test/                  # Scripts de test (WebSocket, communications…)
+├── requirements.txt       # Dépendances Python
+└── README.md              # Ce fichier
 ```
 
 ---
 
-## Lancement de l'API
+## 🚀 Installation & lancement
 
 ### 1. Installer les dépendances
 
-Assure-toi d'avoir Python 3 installé, puis :
+Assure-toi d’avoir Python ≥ 3.8 puis :
 
 ```bash
-pip install flask pymavlink
+pip install -r requirements.txt
+```
 
+### 2. Lancer l’API
+
+```bash
 python app.py
 ```
 
-## Lancer la simulation
+Par défaut, l’API écoute sur **http://0.0.0.0:5000**
 
-cd Projects/drone-sitl/ardupilot/Tools/autotest
-./sim_vehicle.py  -v ArduCopter -f quad --console --map --out=udp:127.0.0.1:14550
+---
 
-## Endpoints disponibles
+## 🛰️ Simulation SITL (ArduPilot)
 
-🔹 GET /
+Pour tester sans drone physique, lance un simulateur ArduCopter :
 
-Renvoie un message de test
+```bash
+cd ~/Projects/drone-sitl/ardupilot/Tools/autotest
+./sim_vehicle.py -v ArduCopter -f quad --console --map --out=udp:127.0.0.1:14550
+```
 
-🔹 GET /flight_info
+---
 
-Renvoie la position et vitesse actuelle du drone
+## 📡 Endpoints disponibles
 
-🔸 POST /create
+### Informations générales
+- **GET /** → Statut de l’API + liste des drones configurés  
+- **GET /drones** → Liste des drones connectés  
+- **GET /missions** → Liste les fichiers de mission (.waypoints)
 
-Crée une mission (fichier mission.waypoints)
+### Télémétrie
+- **GET /drones/<id>/flight_info** → Infos de vol (position, vitesse, batterie…)
 
-curl -X POST <http://localhost:5000/mission/create>
+### Missions
+- **POST /drones/<id>/mission/create** → Créer une mission `.waypoints`
+- **POST /drones/<id>/mission/send** → Envoyer une mission au drone
+- **POST /drones/<id>/mission/modify** → Modifier un waypoint dans une mission
+- **GET /drones/<id>/mission/current** → Télécharger la mission active
 
-🔸 POST /start
+### Commandes
+- **POST /drones/<id>/command** → Changer le mode de vol (`GUIDED`, `AUTO`, `RTL`…)
+- **POST /drones/<id>/start** → Démarrer la mission en cours
 
-Envoie la mission au drone via start_mission.py.
+---
 
-curl -X POST <http://localhost:5000/start>
+## ⚙️ Comment ça marche
 
-🔸 POST /rth
+- `mission_tool.py` contient les fonctions principales :  
+  `create_mission()`, `send_mission()`, `modify_mission()`, `download_mission()`, `list_missions()`  
+- `start_mission.py` démarre la mission en utilisant le fichier `.waypoints`  
+- `return_to_home.py` envoie une commande RTL (Return To Launch)  
+- `telemetry.py` gère la réception et le cache des messages MAVLink  
+- `get_flight_info.py` fournit la position, vitesse et état du drone
 
-Demande le retour au point de lancement (Return to Launch).
+---
 
-curl -X POST <http://localhost:5000/rth>
+## 📖 Documentation complémentaire
 
-## Comment ça marche
-
-- mission.py contient les fonctions create_mission() et send_mission() utilisées par les scripts.
-- start_mission.py lit le fichier mission.json et envoie la mission au drone.
-- create.py génère un fichier mission.json contenant des waypoints.
-- return_to_home.py envoie une commande RTL au drone (via MAVLink).
-- get_flight_info.py écoute les messages MAVLink pour retourner la position et la vitesse sol
+Voir le dossier `Documentation/` :  
+- `Create_mission.md` → détails sur la génération de missions  
+- `guide_waypoints.md` → guide sur le format `.waypoints`

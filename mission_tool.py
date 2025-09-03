@@ -14,6 +14,16 @@ from typing import Iterable, Optional, List, Dict, Any
 
 MISSIONS_DIR = os.path.abspath("missions")
 os.makedirs(MISSIONS_DIR, exist_ok=True)
+# ─────────────────────────────────────────────
+# Fonction : _norm_exts
+# But : Normaliser une liste d’extensions de fichiers
+# Étapes :
+#   - Supprime les entrées vides
+#   - Force en minuscules
+#   - Ajoute un '.' si manquant
+#   - Retourne un tuple d’extensions
+# ─────────────────────────────────────────────
+
 def _norm_exts(exts: Iterable[str]) -> tuple[str, ...]:
     out = []
     for e in exts:
@@ -25,13 +35,22 @@ def _norm_exts(exts: Iterable[str]) -> tuple[str, ...]:
         out.append(e)
     return tuple(out) if out else (".waypoints",)
 
+# ─────────────────────────────────────────────
+# Fonction : list_missions
+# But : Lister les fichiers de missions disponibles
+# Étapes :
+#   - Parcourt un répertoire (optionnellement récursif)
+#   - Filtre selon les extensions et préfixes exclus
+#   - Trie selon nom, taille ou date de modification
+#   - Retourne une liste d’infos (nom, chemin, taille, mtime)
+# ─────────────────────────────────────────────
 def list_missions(
     *,
     base_dir: Optional[str] = None,
     exts: Iterable[str] = (".waypoints",),
     recursive: bool = False,
-    sort: str = "mtime",          # 'name' | 'size' | 'mtime'
-    order: str = "desc",          # 'asc' | 'desc'
+    sort: str = "mtime",          
+    order: str = "desc",     
     limit: Optional[int] = None,
     exclude_prefixes: Iterable[str] = ("DEFAULT",),
 ) -> List[Dict[str, Any]]:
@@ -415,6 +434,15 @@ def modify_mission(filename, seq_to_modify, updated_fields):
 
     print(f"Fichier mis à jour : {filename}")
 
+# ─────────────────────────────────────────────
+# Fonction : _drain_mav
+# But : Vider le buffer MAVLink
+# Étapes :
+#   - Boucle pendant une durée donnée
+#   - Consomme tous les messages disponibles
+#   - Sert à nettoyer les anciens messages avant un échange critique
+# ─────────────────────────────────────────────
+
 def _drain_mav(master, duration=0.2):
     t0 = time.time()
     while time.time() - t0 < duration:
@@ -422,6 +450,19 @@ def _drain_mav(master, duration=0.2):
         if msg is None:
             break
 
+# ─────────────────────────────────────────────
+# Fonction : download_mission
+# But : Télécharger une mission depuis le drone via MAVLink
+# Étapes :
+#   - Vide le buffer MAVLink pour repartir propre
+#   - Envoie une requête pour obtenir le nombre de waypoints (MISSION_COUNT)
+#   - Pour chaque index :
+#       → demande l’item (MISSION_REQUEST_INT / MISSION_REQUEST)
+#       → attend la réponse correspondante (MISSION_ITEM_INT / MISSION_ITEM)
+#   - Vérifie la cohérence des séquences
+#   - Retourne la liste complète des waypoints
+#   - Termine par l’envoi d’un ACK (MISSION_ACK)
+# ─────────────────────────────────────────────
 def download_mission(master, timeout: float = 2.0, retries: int = 3) -> List[Dict[str, Any]]:
     """
     Télécharge de façon robuste la mission chargée:

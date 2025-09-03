@@ -6,7 +6,15 @@ from pymavlink import mavutil
 MAVLINK_IO_LOCK = threading.RLock()
 
 # ─────────────────────────────────────────────
-# Cache de télémétrie
+# Classe : TelemetryCache
+# But : Stocker les derniers messages de télémétrie reçus
+# Champs gérés :
+#   - HEARTBEAT
+#   - GLOBAL_POSITION_INT
+#   - BATTERY_STATUS
+# Étapes :
+#   - update_from_msg() : met à jour les derniers messages
+#   - snapshot() : retourne une copie des données courantes + timestamps
 # ─────────────────────────────────────────────
 class TelemetryCache:
     def __init__(self) -> None:
@@ -38,7 +46,13 @@ class TelemetryCache:
             }
 
 # ─────────────────────────────────────────────
-# Boucle lecteur
+# Fonction : telemetry_reader
+# But : Boucle de lecture MAVLink → met à jour le TelemetryCache
+# Étapes :
+#   - Demande un flux de télémétrie (DATA_STREAM_ALL)
+#   - Ignore les messages liés aux missions
+#   - Met à jour le cache avec les messages valides (heartbeat, position, batterie…)
+#   - Boucle tant que stop_event n’est pas déclenché
 # ─────────────────────────────────────────────
 def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event) -> None:
     # Demande d'un flux de télémétrie
@@ -71,7 +85,13 @@ def telemetry_reader(master, cache: TelemetryCache, stop_event: threading.Event)
             continue
 
 # ─────────────────────────────────────────────
-# Multi-drones: registre de threads/caches par clé
+# Multi-drones : registre
+# But : gérer plusieurs threads/caches télémétrie en parallèle (1 par drone)
+# Structures globales :
+#   - _CACHES  : key → TelemetryCache
+#   - _STOPS   : key → threading.Event (arrêt)
+#   - _THREADS : key → Thread lecteur
+#   - GLOBAL_CACHE : cache legacy par défaut
 # ─────────────────────────────────────────────
 _CACHES: Dict[Hashable, TelemetryCache] = {}
 _STOPS: Dict[Hashable, threading.Event] = {}
@@ -81,6 +101,15 @@ _THREADS: Dict[Hashable, threading.Thread] = {}
 GLOBAL_CACHE = TelemetryCache()
 _LEGACY_KEY: Hashable = "__legacy__"
 
+# ─────────────────────────────────────────────
+# Fonction : start_telemetry_reader
+# But : Lancer un thread de lecture télémétrie pour un drone donné
+# Étapes :
+#   - Détermine la clé (key) : drone_id, id(master) ou mode legacy
+#   - Crée un TelemetryCache si nécessaire
+#   - Lance le thread telemetry_reader si pas déjà actif
+#   - Retourne le cache associé
+# ─────────────────────────────────────────────
 def start_telemetry_reader(
     master,
     cache: Optional[TelemetryCache] = None,
@@ -116,6 +145,14 @@ def start_telemetry_reader(
     t.start()
     return cache
 
+# ─────────────────────────────────────────────
+# Fonction : stop_telemetry_reader
+# But : Arrêter un thread de lecture télémétrie actif
+# Étapes :
+#   - Déclenche l’event d’arrêt
+#   - Join() le thread avec timeout
+#   - Nettoie les dictionnaires globaux (_CACHES, _STOPS, _THREADS)
+# ─────────────────────────────────────────────
 def stop_telemetry_reader(key: Hashable) -> None:
     """Arrête proprement le thread télémétrie pour la clé donnée."""
     ev = _STOPS.get(key)
@@ -131,6 +168,13 @@ def stop_telemetry_reader(key: Hashable) -> None:
     _STOPS.pop(key, None)
     _THREADS.pop(key, None)
 
+# ─────────────────────────────────────────────
+# Fonction : get_cache
+# But : Récupérer le TelemetryCache associé à une clé
+# Étapes :
+#   - Vérifie si la clé existe dans _CACHES
+#   - Retourne l’objet TelemetryCache ou None
+# ─────────────────────────────────────────────
 def get_cache(key: Hashable) -> Optional[TelemetryCache]:
     """Récupère le cache de télémétrie associé à 'key' (ou None s'il n'existe pas)."""
     return _CACHES.get(key)

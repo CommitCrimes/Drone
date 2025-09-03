@@ -24,6 +24,15 @@ DRONES: Dict[int, Dict[str, object]] = {}
 
 app = Flask(__name__)
 
+# ─────────────────────────────────────────────
+# Initialisation des connexions drones
+# But : Créer les connexions MAVLink, démarrer les lecteurs télémétrie
+# Étapes :
+#   - Ouvre la connexion MAVLink (URL/baud)
+#   - Attend un HEARTBEAT
+#   - Démarre un thread `telemetry_reader` par drone
+#   - Enregistre master/cache/stop_event dans DRONES
+# ─────────────────────────────────────────────
 for d in CONFIG.get("drones", []):
     did = int(d["id"])
     url = str(d["conn"])
@@ -41,6 +50,14 @@ for d in CONFIG.get("drones", []):
 
     DRONES[did] = {"master": master, "cache": cache, "stop": stop_evt}
 
+# ─────────────────────────────────────────────
+# Fonction : _get_drone_or_404
+# But : Récupérer les objets (master/cache/stop) pour un drone donné
+# Étapes :
+#   - Cherche la clé dans DRONES
+#   - Retourne (entry, None) si trouvé
+#   - Sinon, retourne une réponse Flask (404)
+# ─────────────────────────────────────────────
 def _get_drone_or_404(drone_id: int) -> Tuple[Optional[Dict[str, object]], Optional[Tuple[Response, int]]]:
     entry = DRONES.get(drone_id)
     if not entry:
@@ -49,6 +66,15 @@ def _get_drone_or_404(drone_id: int) -> Tuple[Optional[Dict[str, object]], Optio
 
 # ─────────────────────────────────────────────
 # Routes
+# ─────────────────────────────────────────────
+
+# ─────────────────────────────────────────────
+# Route : GET /missions
+# But : Lister les fichiers de missions (répertoire MISSIONS_DIR)
+# Étapes :
+#   - Lit les query params (ext, recursive, sort, order, limit)
+#   - Appelle list_missions()
+#   - Retourne {count, files}
 # ─────────────────────────────────────────────
 @app.get("/missions")
 def api_list_missions():
@@ -72,7 +98,14 @@ def api_list_missions():
     )
     return jsonify({"count": len(files), "files": files}), 200
 
-
+# ─────────────────────────────────────────────
+# Route : GET /
+# But : Retourner l’état global + liste des drones (config vs connectés)
+# Étapes :
+#   - Construit un OrderedDict status/drones
+#   - Log la requête
+#   - Retourne JSON (Response)
+# ─────────────────────────────────────────────
 @app.get("/")
 def root():
     response = OrderedDict(
@@ -83,10 +116,26 @@ def root():
     logger.info("GET /")
     return Response(json.dumps(response), mimetype="application/json")
 
+# ─────────────────────────────────────────────
+# Route : GET /drones
+# But : Lister les drones actuellement connectés (clé DRONES)
+# Étapes :
+#   - Trie les IDs
+#   - Retourne une liste [{id, connected: True}]
+# ─────────────────────────────────────────────
 @app.get("/drones")
 def list_drones():
     return jsonify([{"id": did, "connected": True} for did in sorted(DRONES.keys())])
 
+# ─────────────────────────────────────────────
+# Route : GET /drones/<id>/flight_info
+# But : Renvoyer un snapshot d’infos de vol depuis le cache
+# Étapes :
+#   - Récupère le drone (404 si absent)
+#   - Lit paramètre strict (stale interdit ou non)
+#   - Appelle build_flight_info(allow_stale=not strict)
+#   - Log un warning si données "stale"
+# ─────────────────────────────────────────────
 @app.get("/drones/<int:drone_id>/flight_info")
 def api_flight_info(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -97,6 +146,15 @@ def api_flight_info(drone_id: int):
         logger.warning(f"[{drone_id}] Télémétrie stale: {data.get('age_sec')}")
     return jsonify(data), 200
 
+# ─────────────────────────────────────────────
+# Route : POST /drones/<id>/command
+# But : Changer le mode de vol (GUIDED/LOITER/AUTO/…)
+# Étapes :
+#   - Récupère le drone (404 si absent)
+#   - Lit JSON {"mode": "..."}
+#   - Vérifie le mapping des modes
+#   - Applique master.set_mode(...)
+# ─────────────────────────────────────────────
 @app.post("/drones/<int:drone_id>/command")
 def send_command(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -112,6 +170,14 @@ def send_command(drone_id: int):
     logger.info(f"[{drone_id}] Mode -> {mode}")
     return jsonify(message=f"Mode changé vers {mode}"), 200
 
+# ─────────────────────────────────────────────
+# Route : POST /drones/<id>/start
+# But : Démarrer la mission (wrapper vers start_mission.start)
+# Étapes :
+#   - Récupère le drone (404 si absent)
+#   - Appelle start(master)
+#   - Log et retourne un message de succès
+# ─────────────────────────────────────────────
 @app.post("/drones/<int:drone_id>/start")
 def start_mission_route(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -120,6 +186,14 @@ def start_mission_route(drone_id: int):
     logger.info(f"[{drone_id}] start_mission lancé")
     return jsonify(message=f"Mission démarrée (drone {drone_id})"), 200
 
+# ─────────────────────────────────────────────
+# Route : POST /drones/<id>/mission/create
+# But : Créer un fichier .waypoints (QGC) pour le drone
+# Étapes :
+#   - Lit JSON (filename, altitude_takeoff, waypoints, mode, startlat/lon/alt)
+#   - Appelle create_mission(..., drone_id=drone_id)
+#   - Retourne 201 + nom de fichier
+# ─────────────────────────────────────────────
 @app.post("/drones/<int:drone_id>/mission/create")
 def api_create_mission(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -140,6 +214,14 @@ def api_create_mission(drone_id: int):
     )
     return jsonify(message=f"Mission créée dans {filename}", filename=filename), 201
 
+# ─────────────────────────────────────────────
+# Route : POST /drones/<id>/mission/send
+# But : Envoyer une mission .waypoints au drone
+# Étapes :
+#   - Cas upload : lit un fichier .waypoints via multipart, sauvegarde temporaire, send_mission()
+#   - Cas référence : lit JSON {"filename"}, vérifie l’existence, send_mission()
+#   - Retourne un message de succès
+# ─────────────────────────────────────────────
 @app.post("/drones/<int:drone_id>/mission/send")
 def api_send_mission(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -171,6 +253,15 @@ def api_send_mission(drone_id: int):
     logger.info(f"[{drone_id}] Mission envoyée: {filepath}")
     return jsonify(message=f"Mission envoyée depuis {filepath}"), 200
 
+# ─────────────────────────────────────────────
+# Route : POST /drones/<id>/mission/modify
+# But : Modifier un waypoint dans un fichier .waypoints
+# Étapes :
+#   - Lit JSON {filename, seq, updates}
+#   - Résout le chemin vers ./missions si relatif
+#   - Vérifie l’existence
+#   - Appelle modify_mission()
+# ─────────────────────────────────────────────
 @app.post("/drones/<int:drone_id>/mission/modify")
 def api_modify_mission(drone_id: int):
     data = request.get_json(force=True)
@@ -189,6 +280,14 @@ def api_modify_mission(drone_id: int):
     logger.info(f"[{drone_id}] Mission modifiée: {filepath} seq={seq}")
     return jsonify(message="Mission modifiée"), 200
 
+# ─────────────────────────────────────────────
+# Route : GET /drones/<id>/mission/current
+# But : Télécharger la mission actuellement chargée sur le drone
+# Étapes :
+#   - Récupère le drone (404 si absent)
+#   - Appelle download_mission(master)
+#   - Retourne {count, items}
+# ─────────────────────────────────────────────
 @app.get("/drones/<int:drone_id>/mission/current")
 def api_mission_current(drone_id: int):
     entry, err = _get_drone_or_404(drone_id)
@@ -196,6 +295,13 @@ def api_mission_current(drone_id: int):
     items = download_mission(entry["master"])
     return jsonify({"count": len(items), "items": items}), 200
 
+# ─────────────────────────────────────────────
+# Entrée principale
+# But : Lancer l’API Flask
+# Étapes :
+#   - Log le démarrage
+#   - Lance app.run(host=0.0.0.0, port=5000)
+# ─────────────────────────────────────────────
 if __name__ == "__main__":
     logger.info("Démarrage API Flask multi-drones (debug)")
     app.run(debug=False, host="0.0.0.0", port=5000)
